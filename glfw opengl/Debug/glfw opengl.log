@@ -1,0 +1,4 @@
+﻿  point_light.cpp
+C:\Users\Strut\source\repos\glfw opengl\glfw opengl\point_light.cpp(226,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\Strut\source\repos\glfw opengl\glfw opengl\point_light.cpp(260,52): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  glfw opengl.vcxproj -> C:\Users\Strut\source\repos\glfw opengl\Debug\glfw opengl.exe
