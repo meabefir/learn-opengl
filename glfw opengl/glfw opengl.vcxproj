@@ -162,8 +162,6 @@
   <ItemGroup>
     <None Include="fragment9.frag" />
     <None Include="fragment_light_source2.frag" />
-    <None Include="lab3.frag" />
-    <None Include="lab3.vert" />
     <None Include="vertex9.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

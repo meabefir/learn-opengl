@@ -46,11 +46,5 @@
     <None Include="vertex9.vert">
       <Filter>Resource Files\shaders</Filter>
     </None>
-    <None Include="lab3.frag">
-      <Filter>Resource Files\shaders</Filter>
-    </None>
-    <None Include="lab3.vert">
-      <Filter>Resource Files\shaders</Filter>
-    </None>
   </ItemGroup>
 </Project>

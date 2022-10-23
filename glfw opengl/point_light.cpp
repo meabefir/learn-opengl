@@ -81,8 +81,8 @@ int main()
 
     // build and compile our shader zprogram
     // ------------------------------------
-    Shader lightingShader("vertex8.vert", "fragment8.frag");
-    Shader lightCubeShader("vertex8.vert", "fragment_light_source2.frag");
+    Shader lightingShader("vertex9.vert", "fragment9.frag");
+    Shader lightCubeShader("vertex9.vert", "fragment_light_source2.frag");
 
     lightingShader.use();
     // lightingShader.setVec3("light.position", lightPos);
@@ -132,7 +132,7 @@ int main()
          0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
          0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
          0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
-
+             
         -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
          0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 1.0f,
          0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
@@ -258,13 +258,15 @@ int main()
         // be sure to activate shader when setting uniforms/drawing objects
         lightingShader.use();
         lightingShader.setFloat("time", glfwGetTime());
-        lightingShader.setVec3("light.position", lightPos);
-        lightingShader.setVec3("viewPos", camera.Position);
-        //lightingShader.setVec3("light.position", lightPos);
+
+        lightingShader.setVec3("light.position", camera.Position);
+        lightingShader.setVec3("light.direction", camera.Front);
+        lightingShader.setFloat("light.cutOff", glm::cos(glm::radians(12.5f)));
+        lightingShader.setFloat("light.outerCutOff", glm::cos(glm::radians(17.5f)));
         lightingShader.setVec3("viewPos", camera.Position);
 
         // light properties
-        lightingShader.setVec3("light.ambient", 0.0f, 0.0f, 0.0f);
+        lightingShader.setVec3("light.ambient", .5f, .5f, .5f);
         lightingShader.setVec3("light.diffuse", 1.f, 1.f, 1.f);
         lightingShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
 
