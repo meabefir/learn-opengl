@@ -21,7 +21,10 @@
     <ClCompile Include="stb_image.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="point_light.cpp">
+    <ClCompile Include="glad.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="multiple_lights.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -40,10 +43,10 @@
     <None Include="fragment_light_source2.frag">
       <Filter>Resource Files\shaders</Filter>
     </None>
-    <None Include="fragment9.frag">
+    <None Include="fragment10.frag">
       <Filter>Resource Files\shaders</Filter>
     </None>
-    <None Include="vertex9.vert">
+    <None Include="vertex10.vert">
       <Filter>Resource Files\shaders</Filter>
     </None>
   </ItemGroup>

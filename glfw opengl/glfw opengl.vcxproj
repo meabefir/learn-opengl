@@ -151,7 +151,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="point_light.cpp" />
+    <ClCompile Include="glad.c" />
+    <ClCompile Include="multiple_lights.cpp" />
     <ClCompile Include="stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -160,9 +161,9 @@
     <ClInclude Include="stb_image.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="fragment9.frag" />
+    <None Include="fragment10.frag" />
     <None Include="fragment_light_source2.frag" />
-    <None Include="vertex9.vert" />
+    <None Include="vertex10.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
