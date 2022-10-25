@@ -52,5 +52,11 @@
     <None Include="model_light.vert">
       <Filter>Resource Files\shaders</Filter>
     </None>
+    <None Include="light_cube.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="light_cube.vert">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

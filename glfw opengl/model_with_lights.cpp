@@ -33,7 +33,9 @@ bool firstMouse = true;
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
-
+glm::vec3 getTranslation(const glm::mat4& m) {
+    return glm::vec3(m[3][0], m[3][1], m[3][2]);    
+}
 
 int main()
 {
@@ -79,7 +81,68 @@ int main()
 
     stbi_set_flip_vertically_on_load(true);
 
-    Shader ourShader("model_light.vert", "model_light.frag");
+    float vertices[] = {
+        // positions
+        -0.5f, -0.5f, -0.5f, 
+         0.5f, -0.5f, -0.5f, 
+         0.5f,  0.5f, -0.5f, 
+         0.5f,  0.5f, -0.5f, 
+        -0.5f,  0.5f, -0.5f, 
+        -0.5f, -0.5f, -0.5f, 
+
+        -0.5f, -0.5f,  0.5f, 
+         0.5f, -0.5f,  0.5f, 
+         0.5f,  0.5f,  0.5f, 
+         0.5f,  0.5f,  0.5f, 
+        -0.5f,  0.5f,  0.5f, 
+        -0.5f, -0.5f,  0.5f, 
+
+        -0.5f,  0.5f,  0.5f, 
+        -0.5f,  0.5f, -0.5f, 
+        -0.5f, -0.5f, -0.5f, 
+        -0.5f, -0.5f, -0.5f, 
+        -0.5f, -0.5f,  0.5f, 
+        -0.5f,  0.5f,  0.5f, 
+
+         0.5f,  0.5f,  0.5f, 
+         0.5f,  0.5f, -0.5f, 
+         0.5f, -0.5f, -0.5f, 
+         0.5f, -0.5f, -0.5f, 
+         0.5f, -0.5f,  0.5f, 
+         0.5f,  0.5f,  0.5f, 
+
+        -0.5f, -0.5f, -0.5f, 
+         0.5f, -0.5f, -0.5f, 
+         0.5f, -0.5f,  0.5f, 
+         0.5f, -0.5f,  0.5f, 
+        -0.5f, -0.5f,  0.5f, 
+        -0.5f, -0.5f, -0.5f, 
+
+        -0.5f,  0.5f, -0.5f, 
+         0.5f,  0.5f, -0.5f, 
+         0.5f,  0.5f,  0.5f, 
+         0.5f,  0.5f,  0.5f, 
+        -0.5f,  0.5f,  0.5f, 
+        -0.5f,  0.5f, -0.5f, 
+    };
+
+    unsigned int lightCubeVBO, lightCubeVAO;
+    glGenBuffers(1, &lightCubeVBO);
+    glGenVertexArrays(1, &lightCubeVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, lightCubeVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glBindVertexArray(lightCubeVAO);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+
+    const int N_POINTS_LIGHTS = 1;
+    glm::vec3 pointLightsPositions[N_POINTS_LIGHTS] = {
+       /* glm::vec3(1.f, 2.f, 4.0f),
+        glm::vec3(-1.f, 2.f, -4.0f)*/
+    };
+
+    Shader modelShader("model_light.vert", "model_light.frag");
+    Shader lightCubeShader("light_cube.vert", "light_cube.frag");
     Model ourModel("assets/backpack/backpack.obj");
 
     // render loop
@@ -98,23 +161,57 @@ int main()
 
         // render
         // ------
-        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+        // glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        ourShader.use();
+        modelShader.use();
 
+        // update camera pos for projection and view
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
         glm::mat4 view = camera.GetViewMatrix();
-        ourShader.setMat4("projection", glm::value_ptr(projection));
-        ourShader.setMat4("view", glm::value_ptr(view));
+        modelShader.setMat4("projection", glm::value_ptr(projection));
+        modelShader.setMat4("view", glm::value_ptr(view));
 
+        // draw the lights
+# if 0
+        glBindVertexArray(lightCubeVAO);
+        lightCubeShader.use();
+        lightCubeShader.setMat4("projection", glm::value_ptr(projection));
+        lightCubeShader.setMat4("view", glm::value_ptr(view));
+        for (int i = 0; i < N_POINTS_LIGHTS; i++) {
+            glm::mat4 model(1.f);
+            model = glm::translate(model, pointLightsPositions[i]);
+            model = glm::scale(model, glm::vec3(.2f));
+
+            lightCubeShader.setMat4("model", model);
+
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+        }
+# endif
+
+        pointLightsPositions[0] = camera.Position;
+        // set shader lighting data
+        modelShader.use();
+        modelShader.setVec3("viewPos", camera.Position);
+        for (int i = 0; i < N_POINTS_LIGHTS; i++) {
+            modelShader.setVec3("pointLights[" + std::to_string(i) + "].position", pointLightsPositions[i]);
+            modelShader.setVec3("pointLights[" + std::to_string(i) + "].ambient", glm::vec3(.2f));
+            modelShader.setVec3("pointLights[" + std::to_string(i) + "].diffuse", glm::vec3(.8f));
+            modelShader.setVec3("pointLights[" + std::to_string(i) + "].specular", glm::vec3(1.f));
+
+            modelShader.setFloat("pointLights[" + std::to_string(i) + "].constant", 1.0f);
+            modelShader.setFloat("pointLights[" + std::to_string(i) + "].linear", 0.09f);
+            modelShader.setFloat("pointLights[" + std::to_string(i) + "].quadratic", 0.032f);
+        }
+
+        // draw the model
         glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
-        model = glm::scale(model, glm::vec3(1.0f));	// it's a bit too big for our scene, so scale it down
-        ourShader.setMat4("model", model);
-        ourModel.Draw(ourShader);
+        //model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
+        //model = glm::scale(model, glm::vec3(1.0f));	// it's a bit too big for our scene, so scale it down
+        modelShader.setMat4("model", model);
 
-        ourModel.Draw(ourShader);
+        ourModel.Draw(modelShader);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
