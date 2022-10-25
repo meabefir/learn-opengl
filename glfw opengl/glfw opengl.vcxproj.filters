@@ -24,7 +24,7 @@
     <ClCompile Include="glad.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="multiple_lights.cpp">
+    <ClCompile Include="model_with_lights.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -38,15 +38,18 @@
     <ClInclude Include="camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="model.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="fragment_light_source2.frag">
+    <None Include="model_light.frag">
       <Filter>Resource Files\shaders</Filter>
     </None>
-    <None Include="fragment10.frag">
-      <Filter>Resource Files\shaders</Filter>
-    </None>
-    <None Include="vertex10.vert">
+    <None Include="model_light.vert">
       <Filter>Resource Files\shaders</Filter>
     </None>
   </ItemGroup>

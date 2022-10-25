@@ -1,7 +1,8 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\glfw opengl"
   ],
-  "SelectedNode": "\\glfw opengl.sln",
+  "SelectedNode": "\\glfw opengl\\multiple_lights.cpp",
   "PreviewInSolutionExplorer": false
 }

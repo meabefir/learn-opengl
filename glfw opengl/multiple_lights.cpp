@@ -306,7 +306,7 @@ int main()
         float scale = 5.f;
         for (unsigned int i = 0; i < 4; i++)
         {
-            pointLightPositions[i] = basePointLightPositions[i] + glm::vec3(sin(glfwGetTime()) * scale, cos(glfwGetTime()) * scale, sin(glfwGetTime()) * scale);
+            pointLightPositions[i] = basePointLightPositions[i] + glm::vec3(sin(glfwGetTime()) * scale * (i % 2 ? -1 : 1), cos(glfwGetTime()) * scale, sin(glfwGetTime()) * scale * (i % 2 ? -1 : 1));
 
             model = glm::mat4(1.0f);
             model = glm::translate(model, pointLightPositions[i]);

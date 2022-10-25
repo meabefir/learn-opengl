@@ -1,4 +1,54 @@
-﻿  point_light.cpp
-C:\Users\Strut\source\repos\glfw opengl\glfw opengl\point_light.cpp(226,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-C:\Users\Strut\source\repos\glfw opengl\glfw opengl\point_light.cpp(260,52): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  glfw opengl.vcxproj -> C:\Users\Strut\source\repos\glfw opengl\Debug\glfw opengl.exe
+﻿  mesh.cpp
+mesh.obj : error LNK2019: unresolved external symbol _gladLoadGLLoader referenced in function _main
+mesh.obj : error LNK2019: unresolved external symbol _glfwInit referenced in function _main
+mesh.obj : error LNK2019: unresolved external symbol _glfwTerminate referenced in function _main
+mesh.obj : error LNK2019: unresolved external symbol _glfwWindowHint referenced in function _main
+mesh.obj : error LNK2019: unresolved external symbol _glfwCreateWindow referenced in function _main
+mesh.obj : error LNK2019: unresolved external symbol _glfwWindowShouldClose referenced in function _main
+mesh.obj : error LNK2019: unresolved external symbol _glfwSetWindowShouldClose referenced in function "void __cdecl processInput(struct GLFWwindow *)" (?processInput@@YAXPAUGLFWwindow@@@Z)
+mesh.obj : error LNK2019: unresolved external symbol _glfwSetFramebufferSizeCallback referenced in function _main
+mesh.obj : error LNK2019: unresolved external symbol _glfwPollEvents referenced in function _main
+mesh.obj : error LNK2019: unresolved external symbol _glfwSetInputMode referenced in function _main
+mesh.obj : error LNK2019: unresolved external symbol _glfwGetKey referenced in function "void __cdecl processInput(struct GLFWwindow *)" (?processInput@@YAXPAUGLFWwindow@@@Z)
+mesh.obj : error LNK2019: unresolved external symbol _glfwSetCursorPosCallback referenced in function _main
+mesh.obj : error LNK2019: unresolved external symbol _glfwSetScrollCallback referenced in function _main
+mesh.obj : error LNK2019: unresolved external symbol _glfwGetTime referenced in function _main
+mesh.obj : error LNK2019: unresolved external symbol _glfwMakeContextCurrent referenced in function _main
+mesh.obj : error LNK2019: unresolved external symbol _glfwSwapBuffers referenced in function _main
+mesh.obj : error LNK2019: unresolved external symbol _glfwGetProcAddress referenced in function _main
+mesh.obj : error LNK2001: unresolved external symbol _glad_glTexParameteri
+mesh.obj : error LNK2001: unresolved external symbol _glad_glTexImage2D
+mesh.obj : error LNK2001: unresolved external symbol _glad_glClear
+mesh.obj : error LNK2001: unresolved external symbol _glad_glClearColor
+mesh.obj : error LNK2001: unresolved external symbol _glad_glEnable
+mesh.obj : error LNK2001: unresolved external symbol _glad_glViewport
+mesh.obj : error LNK2001: unresolved external symbol _glad_glDrawElements
+mesh.obj : error LNK2001: unresolved external symbol _glad_glBindTexture
+mesh.obj : error LNK2001: unresolved external symbol _glad_glGenTextures
+mesh.obj : error LNK2001: unresolved external symbol _glad_glActiveTexture
+mesh.obj : error LNK2001: unresolved external symbol _glad_glBindBuffer
+mesh.obj : error LNK2001: unresolved external symbol _glad_glGenBuffers
+mesh.obj : error LNK2001: unresolved external symbol _glad_glBufferData
+mesh.obj : error LNK2001: unresolved external symbol _glad_glAttachShader
+mesh.obj : error LNK2001: unresolved external symbol _glad_glCompileShader
+mesh.obj : error LNK2001: unresolved external symbol _glad_glCreateProgram
+mesh.obj : error LNK2001: unresolved external symbol _glad_glCreateShader
+mesh.obj : error LNK2001: unresolved external symbol _glad_glDeleteShader
+mesh.obj : error LNK2001: unresolved external symbol _glad_glEnableVertexAttribArray
+mesh.obj : error LNK2001: unresolved external symbol _glad_glGetProgramiv
+mesh.obj : error LNK2001: unresolved external symbol _glad_glGetProgramInfoLog
+mesh.obj : error LNK2001: unresolved external symbol _glad_glGetShaderiv
+mesh.obj : error LNK2001: unresolved external symbol _glad_glGetShaderInfoLog
+mesh.obj : error LNK2001: unresolved external symbol _glad_glGetUniformLocation
+mesh.obj : error LNK2001: unresolved external symbol _glad_glLinkProgram
+mesh.obj : error LNK2001: unresolved external symbol _glad_glShaderSource
+mesh.obj : error LNK2001: unresolved external symbol _glad_glUseProgram
+mesh.obj : error LNK2001: unresolved external symbol _glad_glUniform1i
+mesh.obj : error LNK2001: unresolved external symbol _glad_glUniformMatrix4fv
+mesh.obj : error LNK2001: unresolved external symbol _glad_glVertexAttribPointer
+mesh.obj : error LNK2001: unresolved external symbol _glad_glVertexAttribIPointer
+mesh.obj : error LNK2001: unresolved external symbol _glad_glGenerateMipmap
+mesh.obj : error LNK2001: unresolved external symbol _glad_glBindVertexArray
+mesh.obj : error LNK2001: unresolved external symbol _glad_glGenVertexArrays
+C:\Users\PHuja\Source\Repos\learn-opengl\\Dependencies\opengl\lib\glfw3.lib : warning LNK4272: library machine type 'x64' conflicts with target machine type 'x86'
+C:\Users\PHuja\Source\Repos\learn-opengl\Debug\glfw opengl.exe : fatal error LNK1120: 51 unresolved externals

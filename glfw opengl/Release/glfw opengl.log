@@ -1,0 +1,26 @@
+﻿  glad.c
+  mesh.cpp
+  stb_image.cpp
+mesh.obj : error LNK2001: unresolved external symbol _glfwSwapBuffers
+mesh.obj : error LNK2001: unresolved external symbol _glfwSetFramebufferSizeCallback
+mesh.obj : error LNK2001: unresolved external symbol _aiGetMaterialTextureCount
+mesh.obj : error LNK2001: unresolved external symbol _glfwGetTime
+mesh.obj : error LNK2001: unresolved external symbol _glfwGetKey
+mesh.obj : error LNK2001: unresolved external symbol _glfwTerminate
+mesh.obj : error LNK2001: unresolved external symbol _glfwPollEvents
+mesh.obj : error LNK2001: unresolved external symbol _glfwInit
+mesh.obj : error LNK2001: unresolved external symbol _glfwSetWindowShouldClose
+mesh.obj : error LNK2001: unresolved external symbol _glfwSetScrollCallback
+mesh.obj : error LNK2001: unresolved external symbol _glfwCreateWindow
+mesh.obj : error LNK2001: unresolved external symbol _glfwWindowHint
+mesh.obj : error LNK2001: unresolved external symbol _glfwSetInputMode
+mesh.obj : error LNK2001: unresolved external symbol _glfwMakeContextCurrent
+mesh.obj : error LNK2001: unresolved external symbol "public: char const * __thiscall Assimp::Importer::GetErrorString(void)const " (?GetErrorString@Importer@Assimp@@QBEPBDXZ)
+mesh.obj : error LNK2001: unresolved external symbol "public: struct aiScene const * __thiscall Assimp::Importer::ReadFile(char const *,unsigned int)" (?ReadFile@Importer@Assimp@@QAEPBUaiScene@@PBDI@Z)
+mesh.obj : error LNK2001: unresolved external symbol "public: __thiscall Assimp::Importer::~Importer(void)" (??1Importer@Assimp@@QAE@XZ)
+mesh.obj : error LNK2001: unresolved external symbol "public: __thiscall Assimp::Importer::Importer(void)" (??0Importer@Assimp@@QAE@XZ)
+mesh.obj : error LNK2001: unresolved external symbol _glfwGetProcAddress
+mesh.obj : error LNK2001: unresolved external symbol _aiGetMaterialTexture
+mesh.obj : error LNK2001: unresolved external symbol _glfwSetCursorPosCallback
+mesh.obj : error LNK2001: unresolved external symbol _glfwWindowShouldClose
+C:\Users\PHuja\Source\Repos\learn-opengl\Release\glfw opengl.exe : fatal error LNK1120: 22 unresolved externals
