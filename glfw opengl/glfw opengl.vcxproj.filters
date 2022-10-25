@@ -58,5 +58,11 @@
     <None Include="light_cube.vert">
       <Filter>Resource Files\shaders</Filter>
     </None>
+    <None Include="diffuse.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="no_texture.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

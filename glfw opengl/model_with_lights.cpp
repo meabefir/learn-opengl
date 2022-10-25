@@ -79,7 +79,7 @@ int main()
     // -----------------------------
     glEnable(GL_DEPTH_TEST);
 
-    stbi_set_flip_vertically_on_load(true);
+    // stbi_set_flip_vertically_on_load(true);
 
     float vertices[] = {
         // positions
@@ -142,8 +142,10 @@ int main()
     };
 
     Shader modelShader("model_light.vert", "model_light.frag");
+    // Shader modelShader("model_light.vert", "diffuse.frag");
     Shader lightCubeShader("light_cube.vert", "light_cube.frag");
-    Model ourModel("assets/backpack/backpack.obj");
+    // Model ourModel("assets/backpack/model.obj");
+    Model ourModel("assets/tren/model.obj");
 
     // render loop
     // -----------
@@ -202,8 +204,8 @@ int main()
             modelShader.setVec3("pointLights[" + std::to_string(i) + "].specular", glm::vec3(1.f));
 
             modelShader.setFloat("pointLights[" + std::to_string(i) + "].constant", 1.0f);
-            modelShader.setFloat("pointLights[" + std::to_string(i) + "].linear", 0.09f);
-            modelShader.setFloat("pointLights[" + std::to_string(i) + "].quadratic", 0.032f);
+            modelShader.setFloat("pointLights[" + std::to_string(i) + "].linear", 0.014f);
+            modelShader.setFloat("pointLights[" + std::to_string(i) + "].quadratic", 0.0007f);
         }
 
         modelShader.setVec3("spotLight.position", camera.Position);
@@ -216,7 +218,7 @@ int main()
         // draw the model
         glm::mat4 model = glm::mat4(1.0f);
         //model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
-        //model = glm::scale(model, glm::vec3(1.0f));	// it's a bit too big for our scene, so scale it down
+        // model = glm::scale(model, glm::vec3(.03f));	// it's a bit too big for our scene, so scale it down
         modelShader.setMat4("model", model);
 
         ourModel.Draw(modelShader);
