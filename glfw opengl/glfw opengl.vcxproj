@@ -152,8 +152,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="glad.c" />
-    <ClCompile Include="model_with_lights.cpp" />
     <ClCompile Include="stb_image.cpp" />
+    <ClCompile Include="stencil.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera.h" />
@@ -163,12 +163,12 @@
     <ClInclude Include="stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="border.frag" />
+    <None Include="depth_test.frag" />
+    <None Include="depth_test.vert" />
     <None Include="diffuse.frag" />
-    <None Include="light_cube.frag" />
-    <None Include="light_cube.vert" />
     <None Include="model_light.frag" />
     <None Include="model_light.vert" />
-    <None Include="no_texture.frag" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

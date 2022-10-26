@@ -143,9 +143,10 @@ int main()
 
     Shader modelShader("model_light.vert", "model_light.frag");
     // Shader modelShader("model_light.vert", "diffuse.frag");
+    // Shader modelShader("model_light.vert", "depth_test.frag");
     Shader lightCubeShader("light_cube.vert", "light_cube.frag");
     // Model ourModel("assets/backpack/model.obj");
-    Model ourModel("assets/tren/model.obj");
+    Model ourModel("assets/sponza/model.obj");
 
     // render loop
     // -----------
@@ -196,16 +197,17 @@ int main()
         pointLightsPositions[0] = camera.Position;
         // set shader lighting data
         modelShader.use();
+        modelShader.setFloat("time", glfwGetTime());
         modelShader.setVec3("viewPos", camera.Position);
         for (int i = 0; i < N_POINTS_LIGHTS; i++) {
             modelShader.setVec3("pointLights[" + std::to_string(i) + "].position", pointLightsPositions[i]);
-            modelShader.setVec3("pointLights[" + std::to_string(i) + "].ambient", glm::vec3(.05f));
+            modelShader.setVec3("pointLights[" + std::to_string(i) + "].ambient", glm::vec3(.01f));
             modelShader.setVec3("pointLights[" + std::to_string(i) + "].diffuse", glm::vec3(.8f));
             modelShader.setVec3("pointLights[" + std::to_string(i) + "].specular", glm::vec3(1.f));
 
             modelShader.setFloat("pointLights[" + std::to_string(i) + "].constant", 1.0f);
-            modelShader.setFloat("pointLights[" + std::to_string(i) + "].linear", 0.014f);
-            modelShader.setFloat("pointLights[" + std::to_string(i) + "].quadratic", 0.0007f);
+            modelShader.setFloat("pointLights[" + std::to_string(i) + "].linear", 0.027f);
+            modelShader.setFloat("pointLights[" + std::to_string(i) + "].quadratic", 0.0028f);
         }
 
         modelShader.setVec3("spotLight.position", camera.Position);
@@ -218,7 +220,7 @@ int main()
         // draw the model
         glm::mat4 model = glm::mat4(1.0f);
         //model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
-        // model = glm::scale(model, glm::vec3(.03f));	// it's a bit too big for our scene, so scale it down
+        model = glm::scale(model, glm::vec3(.03f));	// it's a bit too big for our scene, so scale it down
         modelShader.setMat4("model", model);
 
         ourModel.Draw(modelShader);

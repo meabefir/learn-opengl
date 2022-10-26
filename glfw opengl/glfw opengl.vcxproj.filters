@@ -24,7 +24,7 @@
     <ClCompile Include="glad.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="model_with_lights.cpp">
+    <ClCompile Include="stencil.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -46,22 +46,22 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <None Include="depth_test.vert">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="depth_test.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
     <None Include="model_light.frag">
       <Filter>Resource Files\shaders</Filter>
     </None>
-    <None Include="model_light.vert">
-      <Filter>Resource Files\shaders</Filter>
-    </None>
-    <None Include="light_cube.frag">
-      <Filter>Resource Files\shaders</Filter>
-    </None>
-    <None Include="light_cube.vert">
+    <None Include="border.frag">
       <Filter>Resource Files\shaders</Filter>
     </None>
     <None Include="diffuse.frag">
       <Filter>Resource Files\shaders</Filter>
     </None>
-    <None Include="no_texture.frag">
+    <None Include="model_light.vert">
       <Filter>Resource Files\shaders</Filter>
     </None>
   </ItemGroup>

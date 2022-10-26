@@ -39,13 +39,29 @@ struct SpotLight {
 
 uniform SpotLight spotLight;
 
+uniform float time;
+
 float shininess = 64.f;
 
 vec3 point_light_influence(PointLight light);
 vec3 spot_light_influence(SpotLight light);
 
+float near = 0.1; 
+float far  = 100.0; 
+
+float LinearizeDepth(float depth) 
+{
+    float z = depth * 2.0 - 1.0; // back to NDC 
+    return (2.0 * near * far) / (far + near - z * (far - near));	
+}
+
 void main()
 {    
+    // if (length(FragPos - viewPos) < 6.f) discard;
+
+    // float depth = LinearizeDepth(gl_FragCoord.z) / far;
+    // if (depth < .1f) discard;
+
     vec3 color = vec3(0.0, 0.0, 0.0);
 
     for (int i = 0; i < NR_POINT_LIGHTS; i++) {
@@ -53,6 +69,10 @@ void main()
     }
 
     color += spot_light_influence(spotLight);
+
+    // gl_FragCoord stuff
+    // float scale = 0.5f;
+    // color += vec3(gl_FragCoord.x / 800.f, gl_FragCoord.y / 600.f, abs(sin(time))) * scale;
 
     FragColor = vec4(color, 1.0);
 }
