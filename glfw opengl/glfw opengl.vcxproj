@@ -151,9 +151,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="blending and frame buffer and cube map.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="stb_image.cpp" />
-    <ClCompile Include="stencil.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera.h" />
@@ -163,10 +163,16 @@
     <ClInclude Include="stb_image.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="border.frag" />
-    <None Include="depth_test.frag" />
-    <None Include="depth_test.vert" />
-    <None Include="diffuse.frag" />
+    <None Include="blending.frag" />
+    <None Include="blending.vert" />
+    <None Include="blur.frag" />
+    <None Include="cubemap.frag" />
+    <None Include="cubemap.vert" />
+    <None Include="edge.frag" />
+    <None Include="frame_buffer.frag" />
+    <None Include="frame_buffer.vert" />
+    <None Include="frame_buffer_2.frag" />
+    <None Include="sharpen.frag" />
     <None Include="model_light.frag" />
     <None Include="model_light.vert" />
   </ItemGroup>

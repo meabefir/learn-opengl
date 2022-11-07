@@ -79,6 +79,11 @@ int main()
     // -----------------------------
     glEnable(GL_DEPTH_TEST);
 
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glEnable(GL_CULL_FACE);
+
     // stbi_set_flip_vertically_on_load(true);
 
     float vertices[] = {
@@ -146,7 +151,8 @@ int main()
     // Shader modelShader("model_light.vert", "depth_test.frag");
     Shader lightCubeShader("light_cube.vert", "light_cube.frag");
     // Model ourModel("assets/backpack/model.obj");
-    Model ourModel("assets/sponza/model.obj");
+    // Model ourModel("assets/sponza/model.obj");
+    Model ourModel("assets/tren/model.obj");
 
     // render loop
     // -----------
@@ -220,7 +226,7 @@ int main()
         // draw the model
         glm::mat4 model = glm::mat4(1.0f);
         //model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
-        model = glm::scale(model, glm::vec3(.03f));	// it's a bit too big for our scene, so scale it down
+        // model = glm::scale(model, glm::vec3(.3f));	// it's a bit too big for our scene, so scale it down
         modelShader.setMat4("model", model);
 
         ourModel.Draw(modelShader);

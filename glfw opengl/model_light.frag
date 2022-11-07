@@ -74,7 +74,7 @@ void main()
     // float scale = 0.5f;
     // color += vec3(gl_FragCoord.x / 800.f, gl_FragCoord.y / 600.f, abs(sin(time))) * scale;
 
-    FragColor = vec4(color, 1.0);
+    FragColor = vec4(color, texture(texture_diffuse1, TexCoords).a);
 }
 
 vec3 point_light_influence(PointLight light) {

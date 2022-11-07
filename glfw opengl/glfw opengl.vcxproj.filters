@@ -24,7 +24,7 @@
     <ClCompile Include="glad.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="stencil.cpp">
+    <ClCompile Include="blending and frame buffer and cube map.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -46,22 +46,40 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="depth_test.vert">
-      <Filter>Resource Files\shaders</Filter>
-    </None>
-    <None Include="depth_test.frag">
-      <Filter>Resource Files\shaders</Filter>
-    </None>
     <None Include="model_light.frag">
       <Filter>Resource Files\shaders</Filter>
     </None>
-    <None Include="border.frag">
-      <Filter>Resource Files\shaders</Filter>
-    </None>
-    <None Include="diffuse.frag">
-      <Filter>Resource Files\shaders</Filter>
-    </None>
     <None Include="model_light.vert">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="blending.vert">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="blending.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="frame_buffer.vert">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="frame_buffer.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="frame_buffer_2.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="sharpen.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="blur.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="edge.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="cubemap.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="cubemap.vert">
       <Filter>Resource Files\shaders</Filter>
     </None>
   </ItemGroup>
