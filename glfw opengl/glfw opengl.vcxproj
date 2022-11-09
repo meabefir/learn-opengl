@@ -151,8 +151,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="blending and frame buffer and cube map.cpp" />
     <ClCompile Include="glad.c" />
+    <ClCompile Include="lab6_3.cpp" />
     <ClCompile Include="stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -172,6 +172,8 @@
     <None Include="frame_buffer.frag" />
     <None Include="frame_buffer.vert" />
     <None Include="frame_buffer_2.frag" />
+    <None Include="lab6.frag" />
+    <None Include="lab6.vert" />
     <None Include="sharpen.frag" />
     <None Include="model_light.frag" />
     <None Include="model_light.vert" />

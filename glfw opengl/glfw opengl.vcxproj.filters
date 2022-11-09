@@ -24,7 +24,7 @@
     <ClCompile Include="glad.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="blending and frame buffer and cube map.cpp">
+    <ClCompile Include="lab6_3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -80,6 +80,12 @@
       <Filter>Resource Files\shaders</Filter>
     </None>
     <None Include="cubemap.vert">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="lab6.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="lab6.vert">
       <Filter>Resource Files\shaders</Filter>
     </None>
   </ItemGroup>

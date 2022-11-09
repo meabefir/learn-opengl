@@ -377,17 +377,18 @@ int main()
 
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 
-        glDepthMask(GL_FALSE);
-        skyboxShader.use();
-        // the view is passed without translation
-        skyboxShader.setMat4("view", glm::value_ptr(glm::mat4(glm::mat3(camera.GetViewMatrix()))));
-        // skyboxShader.setMat4("view", glm::value_ptr(camera.GetViewMatrix()));
-        skyboxShader.setMat4("projection", glm::value_ptr(projection));
-        glBindVertexArray(skyboxVAO);
-        // glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
-        glDepthMask(GL_TRUE);
+        // moved skybox rendering at the bottom, to avoid drawing all the pixels of the skyox and then some more on top
+        //glDepthMask(GL_FALSE);
+        //skyboxShader.use();
+        //// the view is passed without translation
+        //skyboxShader.setMat4("view", glm::value_ptr(glm::mat4(glm::mat3(camera.GetViewMatrix()))));
+        //// skyboxShader.setMat4("view", glm::value_ptr(camera.GetViewMatrix()));
+        //skyboxShader.setMat4("projection", glm::value_ptr(projection));
+        //glBindVertexArray(skyboxVAO);
+        //// glActiveTexture(GL_TEXTURE0);
+        //glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
+        //glDrawArrays(GL_TRIANGLES, 0, 36);
+        //glDepthMask(GL_TRUE);
 
         shader.use();
         glm::mat4 view = camera.GetViewMatrix();
@@ -422,6 +423,19 @@ int main()
             glDrawArrays(GL_TRIANGLES, 0, 6);
         }
 
+        // draw skybox, the shader was modified to have gl_position.z = gl_position.w
+        // because w/z is used to determine the depth of the pixel, so it will return 1 which is the max
+        // depth func is lequal because it has to draw on the furthest point (it has a 1) so it has to be less than OR EQUAL
+        glDepthFunc(GL_LEQUAL);
+        skyboxShader.use();
+        // the view is passed without translation
+        skyboxShader.setMat4("view", glm::value_ptr(glm::mat4(glm::mat3(camera.GetViewMatrix()))));
+        skyboxShader.setMat4("projection", glm::value_ptr(projection));
+        glBindVertexArray(skyboxVAO);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+
+        // done writing to the buffer
         glBindFramebuffer(GL_FRAMEBUFFER, 0); // back to default
         glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
