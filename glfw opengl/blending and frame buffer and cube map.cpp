@@ -50,6 +50,7 @@ int main()
 
     // glfw window creation
     // --------------------
+    glfwWindowHint(GLFW_SAMPLES, 16);
     GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
     if (window == NULL)
     {
@@ -78,11 +79,16 @@ int main()
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_MULTISAMPLE);
+    // glEnable(GL_FRAMEBUFFER_SRGB); 
 
     // build and compile shaders
     // -------------------------
     Shader shader("blending.vert", "blending.frag");
+    Shader envShader("env_map.vert", "env_map.frag");
     Shader skyboxShader("cubemap.vert", "cubemap.frag");
+
+
     Shader screenShader("frame_buffer.vert", "frame_buffer.frag");
     Shader screenShader2("frame_buffer.vert", "sharpen.frag");
     // Shader screenShader2("frame_buffer.vert", "blur.frag");
@@ -92,48 +98,49 @@ int main()
     // ------------------------------------------------------------------
     float cubeVertices[] = {
         // positions          // texture Coords
-        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-         0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,   0.0f,  0.0f, -1.0f,
+         0.5f, -0.5f, -0.5f,  1.0f, 0.0f,   0.0f,  0.0f, -1.0f,
+         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,   0.0f,  0.0f, -1.0f,
+         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,   0.0f,  0.0f, -1.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,   0.0f,  0.0f, -1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,   0.0f,  0.0f, -1.0f,
 
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,   0.0f,  0.0f, 1.0f,
+         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,   0.0f,  0.0f, 1.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 1.0f,   0.0f,  0.0f, 1.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 1.0f,   0.0f,  0.0f, 1.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,   0.0f,  0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,   0.0f,  0.0f, 1.0f,
 
-        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,  -1.0f,  0.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,  -1.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,  -1.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,  -1.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,  -1.0f,  0.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,  -1.0f,  0.0f,  0.0f,
 
-         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-         0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,   1.0f,  0.0f,  0.0f,
+         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,   1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f, -0.5f,  0.0f, 1.0f,   1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f, -0.5f,  0.0f, 1.0f,   1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f,  0.5f,  0.0f, 0.0f,   1.0f,  0.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,   1.0f,  0.0f,  0.0f,
 
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,   0.0f, -1.0f,  0.0f,
+         0.5f, -0.5f, -0.5f,  1.0f, 1.0f,   0.0f, -1.0f,  0.0f,
+         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,   0.0f, -1.0f,  0.0f,
+         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,   0.0f, -1.0f,  0.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,   0.0f, -1.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,   0.0f, -1.0f,  0.0f,
 
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,   0.0f,  1.0f,  0.0f,
+         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,   0.0f,  1.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,   0.0f,  1.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,   0.0f,  1.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,   0.0f,  1.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,    0.0f,  1.0f,  0.0f
     };
+
     float skyboxVertices[] = {
         // positions          
         -1.0f,  1.0f, -1.0f,
@@ -212,6 +219,8 @@ int main()
 
     skyboxShader.use();
     skyboxShader.setInt("skybox", 0);
+    envShader.use();
+    envShader.setInt("skybox", 0);
 
     unsigned int skyboxVAO, skyboxVBO;
     glGenBuffers(1, &skyboxVBO);
@@ -264,9 +273,11 @@ int main()
     glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices), &cubeVertices, GL_STATIC_DRAW);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
     // plane VAO
     unsigned int planeVAO, planeVBO;
     glGenVertexArrays(1, &planeVAO);
@@ -292,20 +303,21 @@ int main()
     glBindVertexArray(0);
 
     // quad that i draw frame buffer onto
+    float scale = 1.f;
     float quadVertices[] = {
         -1.f, -1.f, 0.f, .0f, .0f,
-        .0f, -1.f, 0.f, .5f, 0.f,
-        -1.f, 1.f, 0.f, 0.f, 1.f,
-        -1.f, 1.f, 0.f, 0.f, 1.f,
-        0.f, -1.f, 0.f, .5f, 0.f,
-        0.f, 1.f, 0.f, .5f, 1.f,
+        .0f, -1.f, 0.f, .5f * scale, 0.f,
+        -1.f, 1.f, 0.f, 0.f, 1.f * scale,
+        -1.f, 1.f, 0.f, 0.f, 1.f * scale,
+        0.f, -1.f, 0.f, .5f * scale, 0.f,
+        0.f, 1.f, 0.f, .5f * scale, 1.f * scale,
 
-        0.f, -1.f, 0.f, .5f, .0f,
-        1.0f, -1.f, 0.f, 1.f, 0.f,
-        0.f, 1.f, 0.f, 0.5f, 1.f,
-        0.f, 1.f, 0.f, 0.5f, 1.f,
-        1.f, -1.f, 0.f, 1.f, 0.f,
-        1.f, 1.f, 0.f, 1.f, 1.f,
+        0.f, -1.f, 0.f, .5f * scale, .0f,
+        1.0f, -1.f, 0.f, 1.f * scale, 0.f,
+        0.f, 1.f, 0.f, 0.5f * scale, 1.f * scale,
+        0.f, 1.f, 0.f, 0.5f * scale, 1.f * scale,
+        1.f, -1.f, 0.f, 1.f * scale, 0.f,
+        1.f, 1.f, 0.f, 1.f * scale, 1.f * scale,
 
     };
     unsigned int quadVAO, quadVBO;
@@ -377,24 +389,26 @@ int main()
 
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 
-        // moved skybox rendering at the bottom, to avoid drawing all the pixels of the skyox and then some more on top
-        //glDepthMask(GL_FALSE);
-        //skyboxShader.use();
-        //// the view is passed without translation
-        //skyboxShader.setMat4("view", glm::value_ptr(glm::mat4(glm::mat3(camera.GetViewMatrix()))));
-        //// skyboxShader.setMat4("view", glm::value_ptr(camera.GetViewMatrix()));
-        //skyboxShader.setMat4("projection", glm::value_ptr(projection));
-        //glBindVertexArray(skyboxVAO);
-        //// glActiveTexture(GL_TEXTURE0);
-        //glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
-        //glDrawArrays(GL_TRIANGLES, 0, 36);
-        //glDepthMask(GL_TRUE);
+        // DIDNT moved skybox rendering at the bottom, to avoid drawing all the pixels of the skyox and then some more on top
+        
+        glDepthMask(GL_FALSE);
+        skyboxShader.use();
+        // the view is passed without translation
+        skyboxShader.setMat4("view", glm::value_ptr(glm::mat4(glm::mat3(camera.GetViewMatrix()))));
+        // skyboxShader.setMat4("view", glm::value_ptr(camera.GetViewMatrix()));
+        skyboxShader.setMat4("projection", glm::value_ptr(projection));
+        glBindVertexArray(skyboxVAO);
+        // glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+        glDepthMask(GL_TRUE);
 
         shader.use();
         glm::mat4 view = camera.GetViewMatrix();
         glm::mat4 model = glm::mat4(1.0f);
         shader.setMat4("projection", projection);
         shader.setMat4("view", view);
+
         // cubes
         glBindVertexArray(cubeVAO);
         glActiveTexture(GL_TEXTURE0);
@@ -402,11 +416,18 @@ int main()
         model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
         shader.setMat4("model", model);
         glDrawArrays(GL_TRIANGLES, 0, 36);
+
+        envShader.use();
+        envShader.setMat4("projection", projection);
+        envShader.setMat4("view", view);
+        envShader.setVec3("cameraPos", camera.Position);
         model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
-        shader.setMat4("model", model);
+        envShader.setMat4("model", model);
         glDrawArrays(GL_TRIANGLES, 0, 36);
+        
         // floor
+        shader.use();
         glBindVertexArray(planeVAO);
         glBindTexture(GL_TEXTURE_2D, floorTexture);
         model = glm::mat4(1.0f);
@@ -426,14 +447,15 @@ int main()
         // draw skybox, the shader was modified to have gl_position.z = gl_position.w
         // because w/z is used to determine the depth of the pixel, so it will return 1 which is the max
         // depth func is lequal because it has to draw on the furthest point (it has a 1) so it has to be less than OR EQUAL
-        glDepthFunc(GL_LEQUAL);
-        skyboxShader.use();
-        // the view is passed without translation
-        skyboxShader.setMat4("view", glm::value_ptr(glm::mat4(glm::mat3(camera.GetViewMatrix()))));
-        skyboxShader.setMat4("projection", glm::value_ptr(projection));
-        glBindVertexArray(skyboxVAO);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+
+        //glDepthFunc(GL_LEQUAL);
+        //skyboxShader.use();
+        //// the view is passed without translation
+        //skyboxShader.setMat4("view", glm::value_ptr(glm::mat4(glm::mat3(camera.GetViewMatrix()))));
+        //skyboxShader.setMat4("projection", glm::value_ptr(projection));
+        //glBindVertexArray(skyboxVAO);
+        //glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
+        //glDrawArrays(GL_TRIANGLES, 0, 36);
 
         // done writing to the buffer
         glBindFramebuffer(GL_FRAMEBUFFER, 0); // back to default

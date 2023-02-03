@@ -20,8 +20,8 @@ void processInput(GLFWwindow* window);
 unsigned int loadTexture(const char* path);
 
 // settings
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
+const unsigned int SCR_WIDTH = 1280;
+const unsigned int SCR_HEIGHT = 720;
 
 // camera
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
@@ -82,8 +82,6 @@ int main()
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    glEnable(GL_CULL_FACE);
-
     // stbi_set_flip_vertically_on_load(true);
 
     float vertices[] = {
@@ -142,17 +140,20 @@ int main()
 
     const int N_POINTS_LIGHTS = 2;
     glm::vec3 pointLightsPositions[N_POINTS_LIGHTS] = {
-        glm::vec3(1.f, 2.f, 4.0f),
-        glm::vec3(-1.f, 2.f, -4.0f)
+        glm::vec3(7.f, 2.f, 4.0f),
+        glm::vec3(1.f, 5.f, 4.0f)
     };
 
     Shader modelShader("model_light.vert", "model_light.frag");
+    modelShader.use();
+    modelShader.setFloat("fogStr", 1.f);
+    modelShader.setVec3("fogColor", glm::vec3(1.f, 1.f, 0.f));
     // Shader modelShader("model_light.vert", "diffuse.frag");
     // Shader modelShader("model_light.vert", "depth_test.frag");
     Shader lightCubeShader("light_cube.vert", "light_cube.frag");
     // Model ourModel("assets/backpack/model.obj");
-    // Model ourModel("assets/sponza/model.obj");
-    Model ourModel("assets/tren/model.obj");
+    //Model ourModel("assets/sponza/model.obj");
+     Model ourModel("assets/tren/model.obj");
 
     // render loop
     // -----------
@@ -171,13 +172,14 @@ int main()
         // render
         // ------
         // glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+        glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         modelShader.use();
 
         // update camera pos for projection and view
-        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+        //glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+        glm::mat4 projection = glm::infinitePerspective(glm::radians(50.f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f);
         glm::mat4 view = camera.GetViewMatrix();
         modelShader.setMat4("projection", glm::value_ptr(projection));
         modelShader.setMat4("view", glm::value_ptr(view));
@@ -189,7 +191,6 @@ int main()
         lightCubeShader.setMat4("projection", glm::value_ptr(projection));
         lightCubeShader.setMat4("view", glm::value_ptr(view));
         for (int i = 0; i < N_POINTS_LIGHTS; i++) {
-            if (i == 0) continue;
             glm::mat4 model(1.f);
             model = glm::translate(model, pointLightsPositions[i]);
             model = glm::scale(model, glm::vec3(.2f));
@@ -200,7 +201,7 @@ int main()
         }
 # endif
 
-        pointLightsPositions[0] = camera.Position;
+        // pointLightsPositions[0] = camera.Position;
         // set shader lighting data
         modelShader.use();
         modelShader.setFloat("time", glfwGetTime());
@@ -226,7 +227,9 @@ int main()
         // draw the model
         glm::mat4 model = glm::mat4(1.0f);
         //model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
-        // model = glm::scale(model, glm::vec3(.3f));	// it's a bit too big for our scene, so scale it down
+        //model = glm::rotate(model, glm::radians(45.f), glm::vec3(1, 0, 0));
+        //model = glm::rotate(model, glm::radians(45.f), glm::vec3(0, 0, 1));
+         model = glm::scale(model, glm::vec3(1.f));	// it's a bit too big for our scene, so scale it down
         modelShader.setMat4("model", model);
 
         ourModel.Draw(modelShader);
@@ -310,7 +313,7 @@ unsigned int loadTexture(char const* path)
 {
     unsigned int textureID;
     glGenTextures(1, &textureID);
-
+    
     int width, height, nrComponents;
     unsigned char* data = stbi_load(path, &width, &height, &nrComponents, 0);
     if (data)

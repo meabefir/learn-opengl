@@ -14,7 +14,10 @@
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
     <Filter Include="Resource Files\shaders">
-      <UniqueIdentifier>{6ddc8ec4-6677-4645-a0cc-28bef5d17a2d}</UniqueIdentifier>
+      <UniqueIdentifier>{a1633f6f-9a14-4b80-9c47-9264ee5e0205}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\all">
+      <UniqueIdentifier>{ca38d637-ba8c-4dbc-9090-2d474b8e8e2f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -24,7 +27,7 @@
     <ClCompile Include="glad.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="lab6_3.cpp">
+    <ClCompile Include="skeletal_animation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -44,49 +47,31 @@
     <ClInclude Include="model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="glm_helpers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bone.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="animation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="animator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="model_light.frag">
-      <Filter>Resource Files\shaders</Filter>
+      <Filter>Resource Files\all</Filter>
     </None>
     <None Include="model_light.vert">
-      <Filter>Resource Files\shaders</Filter>
+      <Filter>Resource Files\all</Filter>
     </None>
-    <None Include="blending.vert">
-      <Filter>Resource Files\shaders</Filter>
+    <None Include="sk.frag">
+      <Filter>Resource Files\all</Filter>
     </None>
-    <None Include="blending.frag">
-      <Filter>Resource Files\shaders</Filter>
-    </None>
-    <None Include="frame_buffer.vert">
-      <Filter>Resource Files\shaders</Filter>
-    </None>
-    <None Include="frame_buffer.frag">
-      <Filter>Resource Files\shaders</Filter>
-    </None>
-    <None Include="frame_buffer_2.frag">
-      <Filter>Resource Files\shaders</Filter>
-    </None>
-    <None Include="sharpen.frag">
-      <Filter>Resource Files\shaders</Filter>
-    </None>
-    <None Include="blur.frag">
-      <Filter>Resource Files\shaders</Filter>
-    </None>
-    <None Include="edge.frag">
-      <Filter>Resource Files\shaders</Filter>
-    </None>
-    <None Include="cubemap.frag">
-      <Filter>Resource Files\shaders</Filter>
-    </None>
-    <None Include="cubemap.vert">
-      <Filter>Resource Files\shaders</Filter>
-    </None>
-    <None Include="lab6.frag">
-      <Filter>Resource Files\shaders</Filter>
-    </None>
-    <None Include="lab6.vert">
-      <Filter>Resource Files\shaders</Filter>
+    <None Include="sk.vert">
+      <Filter>Resource Files\all</Filter>
     </None>
   </ItemGroup>
 </Project>

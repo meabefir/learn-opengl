@@ -3,7 +3,7 @@
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+// #include <glm/gtc/matrix_transform.hpp>
 
 #include <vector>
 
@@ -17,10 +17,15 @@ enum Camera_Movement {
     UP
 };
 
+enum class MODE {
+    FREE,
+    PIVOT
+};
+
 // Default camera values
 const float YAW = -90.0f;
 const float PITCH = 0.0f;
-const float SPEED = 5.5f;
+const float SPEED = 15.f;
 const float SENSITIVITY = 0.1f;
 const float ZOOM = 45.0f;
 
@@ -42,6 +47,14 @@ public:
     float MovementSpeed;
     float MouseSensitivity;
     float Zoom;
+
+    MODE cameraMode = MODE::FREE;
+    glm::vec3 Pivot;
+    float pivotDistance = 1.f;
+
+    void setPivot(const glm::vec3 _pivot) {
+        Pivot = _pivot;
+    }
 
     // constructor with vectors
     Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH) : Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM)
@@ -65,12 +78,20 @@ public:
     // returns the view matrix calculated using Euler Angles and the LookAt Matrix
     glm::mat4 GetViewMatrix()
     {
-        return glm::lookAt(Position, Position + Front, Up);
+        if (cameraMode == MODE::FREE)
+            return glm::lookAt(Position, Position + Front, Up);
+        else if (cameraMode == MODE::PIVOT)
+            return glm::lookAt(Position, Pivot, Up);
+    }
+
+    void setMode(MODE new_mode) {
+        cameraMode = new_mode;
     }
 
     // processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
     void ProcessKeyboard(Camera_Movement direction, float deltaTime)
     {
+        if (cameraMode != MODE::FREE) return;
         float velocity = MovementSpeed * deltaTime;
         if (direction == FORWARD)
             Position += Front * velocity;
@@ -131,6 +152,22 @@ private:
         // also re-calculate the Right and Up vector
         Right = glm::normalize(glm::cross(Front, WorldUp));  // normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
         Up = glm::normalize(glm::cross(Right, Front));
+        
+        // if pivoting update position here
+        if (cameraMode == MODE::PIVOT) {
+            float p = Pitch;
+            if (p > 0) {
+                p = 90.f - p;
+            }
+            else if (p <= 0) {
+                p = 90.f + p * -1.f;
+            }
+            Position.x = glm::sin(glm::radians(p)) * glm::cos(glm::radians(Yaw));
+            Position.y = glm::cos(glm::radians(p));
+            Position.z = glm::sin(glm::radians(p)) * glm::sin(glm::radians(Yaw));
+            Position *= pivotDistance;
+            Position += Pivot;
+        }
     }
 };
 #endif
