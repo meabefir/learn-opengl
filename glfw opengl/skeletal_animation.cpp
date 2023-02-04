@@ -14,6 +14,11 @@
 
 #include <iostream>
 
+extern "C"
+{
+    __declspec(dllexport) unsigned long NvOptimusEnablement = 0x00000001;
+}
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
@@ -158,7 +163,7 @@ int main()
     //Model ourModel("assets/tren/model.obj");
     Model ourModel("assets/vampire/model.dae");
     Animation danceAnimation("assets/vampire/model.dae", &ourModel);
-    const int N = 50;
+    const int N = 250;
     
     float timeOffsets[N];
     float t = 0.f;
