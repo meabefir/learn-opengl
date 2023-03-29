@@ -1,33 +1,53 @@
-﻿  skeletal_animation.cpp
-C:\Users\Strut\Desktop\vs projects\learn-opengl\glfw opengl\model.h(205,43): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Strut\Desktop\vs projects\learn-opengl\glfw opengl\bone.h(58,29): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\Strut\Desktop\vs projects\learn-opengl\glfw opengl\bone.h(69,29): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\Strut\Desktop\vs projects\learn-opengl\glfw opengl\bone.h(80,29): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\Strut\Desktop\vs projects\learn-opengl\glfw opengl\animation.h(33,31): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\Strut\Desktop\vs projects\learn-opengl\glfw opengl\animation.h(34,37): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
-C:\Users\Strut\Desktop\vs projects\learn-opengl\glfw opengl\animation.h(56,47): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
-C:\Users\Strut\Desktop\vs projects\learn-opengl\glfw opengl\animation.h(101,27): warning C4018: '<': signed/unsigned mismatch
-C:\Users\Strut\Desktop\vs projects\learn-opengl\glfw opengl\skeletal_animation.cpp(240,49): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-     Creating library C:\Users\Strut\Desktop\vs projects\learn-opengl\x64\Release\glfw opengl.lib and object C:\Users\Strut\Desktop\vs projects\learn-opengl\x64\Release\glfw opengl.exp
+﻿  MousePicker.cpp
+C:\work\vs projects\learn-opengl\glfw opengl\model.hpp(151,1): warning C4305: 'argument': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+C:\work\vs projects\learn-opengl\glfw opengl\model.hpp(352,43): warning C4018: '<': signed/unsigned mismatch
+  model_with_lights.cpp
+C:\work\vs projects\learn-opengl\glfw opengl\model.hpp(151,1): warning C4305: 'argument': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+C:\work\vs projects\learn-opengl\glfw opengl\model.hpp(352,43): warning C4018: '<': signed/unsigned mismatch
+C:\work\vs projects\learn-opengl\glfw opengl\model_with_lights.cpp(260,72): warning C4244: 'argument': conversion from 'float' to 'GLsizei', possible loss of data
+C:\work\vs projects\learn-opengl\glfw opengl\model_with_lights.cpp(260,55): warning C4244: 'argument': conversion from 'float' to 'GLsizei', possible loss of data
+C:\work\vs projects\learn-opengl\glfw opengl\model_with_lights.cpp(269,91): warning C4244: 'argument': conversion from 'float' to 'GLsizei', possible loss of data
+C:\work\vs projects\learn-opengl\glfw opengl\model_with_lights.cpp(269,74): warning C4244: 'argument': conversion from 'float' to 'GLsizei', possible loss of data
+C:\work\vs projects\learn-opengl\glfw opengl\model_with_lights.cpp(293,38): warning C4305: 'argument': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+C:\work\vs projects\learn-opengl\glfw opengl\model_with_lights.cpp(356,49): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\work\vs projects\learn-opengl\glfw opengl\model_with_lights.cpp(363,49): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\work\vs projects\learn-opengl\glfw opengl\model_with_lights.cpp(371,53): warning C4244: 'argument': conversion from 'float' to 'GLsizei', possible loss of data
+C:\work\vs projects\learn-opengl\glfw opengl\model_with_lights.cpp(371,36): warning C4244: 'argument': conversion from 'float' to 'GLsizei', possible loss of data
+C:\work\vs projects\learn-opengl\glfw opengl\model_with_lights.cpp(377,49): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\work\vs projects\learn-opengl\glfw opengl\model_with_lights.cpp(416,49): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\work\vs projects\learn-opengl\glfw opengl\model_with_lights.cpp(421,49): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+     Creating library C:\work\vs projects\learn-opengl\x64\Release\glfw opengl.lib and object C:\work\vs projects\learn-opengl\x64\Release\glfw opengl.exp
 LINK : warning LNK4098: defaultlib 'MSVCRTD' conflicts with use of other libs; use /NODEFAULTLIB:library
   Generating code
-  1 of 1387 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+  22 of 1107 functions ( 2.0%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    8 functions had inline decision re-evaluated but remain unchanged
+    22 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
-glfw3.lib(context.obj) : warning LNK4099: PDB 'glfw3.pdb' was not found with 'glfw3.lib(context.obj)' or at 'C:\Users\Strut\Desktop\vs projects\learn-opengl\x64\Release\glfw3.pdb'; linking object as if no debug info
-glfw3.lib(init.obj) : warning LNK4099: PDB 'glfw3.pdb' was not found with 'glfw3.lib(init.obj)' or at 'C:\Users\Strut\Desktop\vs projects\learn-opengl\x64\Release\glfw3.pdb'; linking object as if no debug info
-glfw3.lib(input.obj) : warning LNK4099: PDB 'glfw3.pdb' was not found with 'glfw3.lib(input.obj)' or at 'C:\Users\Strut\Desktop\vs projects\learn-opengl\x64\Release\glfw3.pdb'; linking object as if no debug info
-glfw3.lib(monitor.obj) : warning LNK4099: PDB 'glfw3.pdb' was not found with 'glfw3.lib(monitor.obj)' or at 'C:\Users\Strut\Desktop\vs projects\learn-opengl\x64\Release\glfw3.pdb'; linking object as if no debug info
-glfw3.lib(vulkan.obj) : warning LNK4099: PDB 'glfw3.pdb' was not found with 'glfw3.lib(vulkan.obj)' or at 'C:\Users\Strut\Desktop\vs projects\learn-opengl\x64\Release\glfw3.pdb'; linking object as if no debug info
-glfw3.lib(window.obj) : warning LNK4099: PDB '' was not found with 'glfw3.lib(window.obj)' or at ''; linking object as if no debug info
-glfw3.lib(win32_init.obj) : warning LNK4099: PDB 'glfw3.pdb' was not found with 'glfw3.lib(win32_init.obj)' or at 'C:\Users\Strut\Desktop\vs projects\learn-opengl\x64\Release\glfw3.pdb'; linking object as if no debug info
-glfw3.lib(win32_joystick.obj) : warning LNK4099: PDB 'glfw3.pdb' was not found with 'glfw3.lib(win32_joystick.obj)' or at 'C:\Users\Strut\Desktop\vs projects\learn-opengl\x64\Release\glfw3.pdb'; linking object as if no debug info
-glfw3.lib(win32_monitor.obj) : warning LNK4099: PDB 'glfw3.pdb' was not found with 'glfw3.lib(win32_monitor.obj)' or at 'C:\Users\Strut\Desktop\vs projects\learn-opengl\x64\Release\glfw3.pdb'; linking object as if no debug info
-glfw3.lib(win32_time.obj) : warning LNK4099: PDB '' was not found with 'glfw3.lib(win32_time.obj)' or at ''; linking object as if no debug info
-glfw3.lib(win32_thread.obj) : warning LNK4099: PDB 'glfw3.pdb' was not found with 'glfw3.lib(win32_thread.obj)' or at 'C:\Users\Strut\Desktop\vs projects\learn-opengl\x64\Release\glfw3.pdb'; linking object as if no debug info
-glfw3.lib(win32_window.obj) : warning LNK4099: PDB '' was not found with 'glfw3.lib(win32_window.obj)' or at ''; linking object as if no debug info
-glfw3.lib(wgl_context.obj) : warning LNK4099: PDB 'glfw3.pdb' was not found with 'glfw3.lib(wgl_context.obj)' or at 'C:\Users\Strut\Desktop\vs projects\learn-opengl\x64\Release\glfw3.pdb'; linking object as if no debug info
-glfw3.lib(egl_context.obj) : warning LNK4099: PDB 'glfw3.pdb' was not found with 'glfw3.lib(egl_context.obj)' or at 'C:\Users\Strut\Desktop\vs projects\learn-opengl\x64\Release\glfw3.pdb'; linking object as if no debug info
-glfw3.lib(osmesa_context.obj) : warning LNK4099: PDB '' was not found with 'glfw3.lib(osmesa_context.obj)' or at ''; linking object as if no debug info
-  glfw opengl.vcxproj -> C:\Users\Strut\Desktop\vs projects\learn-opengl\x64\Release\glfw opengl.exe
+glfw3.lib(context.obj) : warning LNK4099: PDB 'glfw3.pdb' was not found with 'glfw3.lib(context.obj)' or at 'C:\work\vs projects\learn-opengl\x64\Release\glfw3.pdb'; linking object as if no debug info
+glfw3.lib(init.obj) : warning LNK4099: PDB 'glfw3.pdb' was not found with 'glfw3.lib(init.obj)' or at 'C:\work\vs projects\learn-opengl\x64\Release\glfw3.pdb'; linking object as if no debug info
+glfw3.lib(input.obj) : warning LNK4099: PDB 'glfw3.pdb' was not found with 'glfw3.lib(input.obj)' or at 'C:\work\vs projects\learn-opengl\x64\Release\glfw3.pdb'; linking object as if no debug info
+glfw3.lib(monitor.obj) : warning LNK4099: PDB 'glfw3.pdb' was not found with 'glfw3.lib(monitor.obj)' or at 'C:\work\vs projects\learn-opengl\x64\Release\glfw3.pdb'; linking object as if no debug info
+glfw3.lib(vulkan.obj) : warning LNK4099: PDB 'glfw3.pdb' was not found with 'glfw3.lib(vulkan.obj)' or at 'C:\work\vs projects\learn-opengl\x64\Release\glfw3.pdb'; linking object as if no debug info
+glfw3.lib(window.obj) : warning LNK4099: PDB 'glfw3.pdb' was not found with 'glfw3.lib(window.obj)' or at 'C:\work\vs projects\learn-opengl\x64\Release\glfw3.pdb'; linking object as if no debug info
+glfw3.lib(win32_init.obj) : warning LNK4099: PDB 'glfw3.pdb' was not found with 'glfw3.lib(win32_init.obj)' or at 'C:\work\vs projects\learn-opengl\x64\Release\glfw3.pdb'; linking object as if no debug info
+glfw3.lib(win32_joystick.obj) : warning LNK4099: PDB 'glfw3.pdb' was not found with 'glfw3.lib(win32_joystick.obj)' or at 'C:\work\vs projects\learn-opengl\x64\Release\glfw3.pdb'; linking object as if no debug info
+glfw3.lib(win32_monitor.obj) : warning LNK4099: PDB 'glfw3.pdb' was not found with 'glfw3.lib(win32_monitor.obj)' or at 'C:\work\vs projects\learn-opengl\x64\Release\glfw3.pdb'; linking object as if no debug info
+glfw3.lib(win32_time.obj) : warning LNK4099: PDB 'glfw3.pdb' was not found with 'glfw3.lib(win32_time.obj)' or at 'C:\work\vs projects\learn-opengl\x64\Release\glfw3.pdb'; linking object as if no debug info
+glfw3.lib(win32_thread.obj) : warning LNK4099: PDB 'glfw3.pdb' was not found with 'glfw3.lib(win32_thread.obj)' or at 'C:\work\vs projects\learn-opengl\x64\Release\glfw3.pdb'; linking object as if no debug info
+glfw3.lib(win32_window.obj) : warning LNK4099: PDB 'glfw3.pdb' was not found with 'glfw3.lib(win32_window.obj)' or at 'C:\work\vs projects\learn-opengl\x64\Release\glfw3.pdb'; linking object as if no debug info
+glfw3.lib(wgl_context.obj) : warning LNK4099: PDB 'glfw3.pdb' was not found with 'glfw3.lib(wgl_context.obj)' or at 'C:\work\vs projects\learn-opengl\x64\Release\glfw3.pdb'; linking object as if no debug info
+glfw3.lib(egl_context.obj) : warning LNK4099: PDB 'glfw3.pdb' was not found with 'glfw3.lib(egl_context.obj)' or at 'C:\work\vs projects\learn-opengl\x64\Release\glfw3.pdb'; linking object as if no debug info
+glfw3.lib(osmesa_context.obj) : warning LNK4099: PDB 'glfw3.pdb' was not found with 'glfw3.lib(osmesa_context.obj)' or at 'C:\work\vs projects\learn-opengl\x64\Release\glfw3.pdb'; linking object as if no debug info
+  glfw opengl.vcxproj -> C:\work\vs projects\learn-opengl\x64\Release\glfw opengl.exe

@@ -13,10 +13,13 @@ uniform mat4 projection;
 
 void main()
 {
+
     TexCoords = aTexCoords;    
     gl_Position = projection * view * model * vec4(aPos, 1.0);
     FragPos = vec3(model * vec4(aPos, 1.0));
     Normal = aNormal;
+
+    // gl_ClipDistance[0] = (length(model * vec4(aPos, 1.0)) > 5.f) ? -1.f : 1.f;
 
      mat3 normalMatrix = transpose(inverse(mat3(model)));
      Normal = normalMatrix * aNormal;

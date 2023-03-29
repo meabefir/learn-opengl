@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\Users\Strut\source\repos\glfw opengl\x64\Debug\glfw opengl.exe</FullPath>
+      <FullPath>C:\work\vs projects\learn-opengl\x64\Debug\glfw opengl.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

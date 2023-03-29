@@ -27,7 +27,13 @@
     <ClCompile Include="glad.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="skeletal_animation.cpp">
+    <ClCompile Include="model_with_lights.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="globals.hpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MousePicker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -44,7 +50,7 @@
     <ClInclude Include="mesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="model.h">
+    <ClInclude Include="model.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="glm_helpers.h">
@@ -59,6 +65,15 @@
     <ClInclude Include="animator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MousePicker.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="calc.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="constants.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="model_light.frag">
@@ -71,6 +86,24 @@
       <Filter>Resource Files\all</Filter>
     </None>
     <None Include="sk.vert">
+      <Filter>Resource Files\all</Filter>
+    </None>
+    <None Include="floor.frag">
+      <Filter>Resource Files\all</Filter>
+    </None>
+    <None Include="floor.vert">
+      <Filter>Resource Files\all</Filter>
+    </None>
+    <None Include="light_cube.frag">
+      <Filter>Resource Files\all</Filter>
+    </None>
+    <None Include="light_cube.vert">
+      <Filter>Resource Files\all</Filter>
+    </None>
+    <None Include="viewport.frag">
+      <Filter>Resource Files\all</Filter>
+    </None>
+    <None Include="viewport.vert">
       <Filter>Resource Files\all</Filter>
     </None>
   </ItemGroup>

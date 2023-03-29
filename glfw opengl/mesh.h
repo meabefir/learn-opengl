@@ -7,6 +7,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "shader.h"
+#include "calc.hpp"
 
 #include <string>
 #include <vector>
@@ -45,6 +46,29 @@ public:
     vector<Texture>      textures;
     unsigned int VAO;
 
+    bool intersectsSegment(glm::vec3 from, glm::vec3 to, glm::mat4& transform) {
+        for (int i = 0; i < indices.size() - indices.size() % 3; i += 3) {
+            auto p1 = transform * glm::vec4(vertices[indices[i]].Position, 1);
+            auto p2 = transform * glm::vec4(vertices[indices[i+1]].Position, 1);
+            auto p3 = transform * glm::vec4(vertices[indices[i+2]].Position, 1);
+            if (line_intersect_triangle(from, to, glm::vec3(p1),glm::vec3(p2), glm::vec3(p3))) return true;
+        }
+        return false;
+    }
+
+    void updateBB(glm::vec3& min, glm::vec3& max) {
+        for (auto& vert : vertices) {
+            auto& p = vert.Position;
+            if (p.x > max.x) max.x = p.x;
+            if (p.y > max.y) max.y = p.y;
+            if (p.z > max.z) max.z = p.z;
+
+            if (p.x < min.x) min.x = p.x;
+            if (p.y < min.y) min.y = p.y;
+            if (p.z < min.z) min.z = p.z;
+        }
+    }
+
     // constructor
     Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<Texture> textures)
     {
@@ -59,6 +83,7 @@ public:
     // render the mesh
     void Draw(Shader& shader)
     {
+        //if (indices.size() == 146844) return;
         // bind appropriate textures
         unsigned int diffuseNr = 1;
         unsigned int specularNr = 1;
@@ -86,7 +111,9 @@ public:
         }
         // draw mesh
         glBindVertexArray(VAO);
+        //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         glDrawElements(GL_TRIANGLES, static_cast<unsigned int>(indices.size()), GL_UNSIGNED_INT, 0);
+        //glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
         glBindVertexArray(0);
 
         // always good practice to set everything back to defaults once configured.

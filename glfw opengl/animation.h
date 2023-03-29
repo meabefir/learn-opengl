@@ -4,7 +4,7 @@
 #include <glm/gtc/quaternion.hpp>
 #include <vector>
 
-#include "model.h"
+#include "model.hpp"
 #include "bone.h"
 #include "glm_helpers.h"
 #include <assimp/Importer.hpp>

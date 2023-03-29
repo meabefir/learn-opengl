@@ -10,7 +10,9 @@ uniform sampler2D texture_specular1;
 uniform sampler2D texture_normal1;
 
 uniform vec3 viewPos;
-uniform float fogStr = .8f;
+uniform float fogStr = .1f;
+
+uniform bool selected = false;
 
 struct PointLight {
     vec3 position;
@@ -24,7 +26,7 @@ struct PointLight {
     float quadratic;
 };
 
-#define NR_POINT_LIGHTS 10
+#define NR_POINT_LIGHTS 2
 uniform PointLight pointLights[NR_POINT_LIGHTS];
 uniform int nLights = NR_POINT_LIGHTS;
 
@@ -80,6 +82,9 @@ void main()
     // color += vec3(gl_FragCoord.x / 800.f, gl_FragCoord.y / 600.f, abs(sin(time))) * scale;
 
     FragColor = vec4(color, texture(texture_diffuse1, TexCoords).a);
+    if (selected) {
+        FragColor = mix(FragColor, vec4(252.f / 255.f, 15.f / 255.f, 192.f / 255.f, 1.f), .1f);
+    }
     // FragColor = texture(texture_diffuse1, TexCoords);
 }
 

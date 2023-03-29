@@ -9,7 +9,7 @@
 
 #include "shader.h"
 #include "camera.h"
-#include "model.h"
+#include "model.hpp"
 #include "animator.h"
 
 #include <iostream>
@@ -163,7 +163,7 @@ int main()
     //Model ourModel("assets/tren/model.obj");
     Model ourModel("assets/vampire/model.dae");
     Animation danceAnimation("assets/vampire/model.dae", &ourModel);
-    const int N = 250;
+    const int N = 50;
     
     float timeOffsets[N];
     float t = 0.f;

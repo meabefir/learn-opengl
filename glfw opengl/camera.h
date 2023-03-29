@@ -3,7 +3,7 @@
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
-// #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include <vector>
 
@@ -75,6 +75,12 @@ public:
         updateCameraVectors();
     }
 
+    void flip() {
+        Position.y = -Position.y;
+        Pitch = -Pitch;
+        updateCameraVectors();
+    }
+
     // returns the view matrix calculated using Euler Angles and the LookAt Matrix
     glm::mat4 GetViewMatrix()
     {
@@ -139,7 +145,7 @@ public:
             Zoom = 111.0f;
     }
 
-private:
+public:
     // calculates the front vector from the Camera's (updated) Euler Angles
     void updateCameraVectors()
     {
