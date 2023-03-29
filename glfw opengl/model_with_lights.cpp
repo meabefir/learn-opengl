@@ -26,6 +26,13 @@ extern "C"
 const unsigned int SCR_WIDTH = 1280;
 const unsigned int SCR_HEIGHT = 720;
 
+float initial_aspect_ratio = (float)SCR_WIDTH / (float)SCR_HEIGHT;
+float current_aspect_ratio = initial_aspect_ratio;
+float width_aspect = 1.f, height_aspect = 1.f;
+
+int CURRENT_WIDTH = SCR_WIDTH;
+int CURRENT_HEIGHT = SCR_HEIGHT;
+
 MousePicker* mousePicker = nullptr;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -38,8 +45,8 @@ unsigned int loadTexture(const char* path);
 
 // camera
 Camera camera(glm::vec3(0.0f, 0.0f, 0.0f));
-float lastX = SCR_WIDTH / 2.0f;
-float lastY = SCR_HEIGHT / 2.0f;
+float lastX = CURRENT_WIDTH / 2.0f;
+float lastY = CURRENT_HEIGHT / 2.0f;
 bool firstMouse = true;
 
 // timing
@@ -257,7 +264,7 @@ int main()
     float ss = 2.f;
     // generate color texture attachment
     glBindTexture(GL_TEXTURE_2D, reflection_texture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, SCR_WIDTH * ss, SCR_HEIGHT * ss, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, SCR_WIDTH * ss, SCR_HEIGHT * ss , 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, reflection_texture, 0);
@@ -337,10 +344,9 @@ int main()
         // update camera pos for projection and view
         //glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
         
-        glm::mat4 projection = glm::infinitePerspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f);
+        glm::mat4 projection = glm::infinitePerspective(glm::radians(camera.Zoom), (float)CURRENT_WIDTH / (float)CURRENT_HEIGHT, 0.1f);
         mousePicker->projectionMatrix = projection;
         mousePicker->update(lastX, lastY);
-
 
         modelShader.use();
         modelShader.setMat4("projection", glm::value_ptr(projection));
@@ -349,6 +355,9 @@ int main()
         floorShader.use();
         floorShader.setMat4("projection", glm::value_ptr(projection));
         floorShader.setMat4("view", glm::value_ptr(camera.GetViewMatrix()));
+        floorShader.setFloat("aspect_ratio", initial_aspect_ratio/current_aspect_ratio);
+        /*floorShader.setFloat("width_aspect", width_aspect);
+        floorShader.setFloat("height_aspect", height_aspect);*/
 
 
         // DRAWING BEGINS
@@ -367,6 +376,7 @@ int main()
         floorShader.setFloat("spotLight.outerCutOff", glm::cos(glm::radians(12.f)));
 
 #pragma region draw_reflection
+        glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
         glBindFramebuffer(GL_FRAMEBUFFER, reflection_FBO);
         glViewport(0, 0, SCR_WIDTH * ss, SCR_HEIGHT * ss);
         glClearColor(0.f, 0.f, 0.f, 1.0f);
@@ -405,9 +415,8 @@ int main()
         }
 #pragma endregion draw_reflection
 
-
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
+        glViewport(0, 0, CURRENT_WIDTH, CURRENT_HEIGHT);
         glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         camera.flip();
@@ -480,7 +489,7 @@ int main()
         glDrawArrays(GL_TRIANGLES, 0, 6);
 
         // draw world ray cube
-        if (glfwGetInputMode(window, GLFW_CURSOR) == GLFW_CURSOR_NORMAL) {
+        /*if (glfwGetInputMode(window, GLFW_CURSOR) == GLFW_CURSOR_NORMAL) {
             lightCubeShader.use();
             lightCubeShader.setVec3("color", glm::vec3(1.f, 0.f, 0.f));
             glDisable(GL_DEPTH_TEST);
@@ -491,7 +500,7 @@ int main()
             glBindVertexArray(lightCubeVAO);
             glDrawArrays(GL_TRIANGLES, 0, 36);
             glEnable(GL_DEPTH_TEST);
-        }
+        }*/
 
         //glBindFramebuffer(GL_FRAMEBUFFER, 0);
         // test
@@ -499,9 +508,9 @@ int main()
         //glDisable(GL_CULL_FACE);
         model = glm::mat4(1.f);
         float s = .2f;
-        model = glm::scale(model, glm::vec3(SCR_WIDTH * s, SCR_HEIGHT * s, 1.f));
+        model = glm::scale(model, glm::vec3(CURRENT_WIDTH * s, CURRENT_HEIGHT * s, 1.f));
         model = glm::translate(model, glm::vec3(.5, .5, 0.f));
-        projection = glm::ortho(0.f, (float)SCR_WIDTH, 0.f, (float)SCR_HEIGHT, 0.f, 1000.f);
+        projection = glm::ortho(0.f, (float)CURRENT_WIDTH, 0.f, (float)CURRENT_HEIGHT, 0.f, 1000.f);
         //projection = glm::ortho(0, (int)10, 0, (int)10);
         viewportShader.use();
         viewportShader.setMat4("model", model);
@@ -632,7 +641,10 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         camera.Yaw += 15.f;
         camera.updateCameraVectors();
     }
-
+    else if (key == GLFW_KEY_R && action == GLFW_PRESS)
+    {
+        glfwSetWindowSize(window, CURRENT_WIDTH * 1.1, CURRENT_HEIGHT * 1.1);
+    }
 }
 
 void handleClick() {
@@ -684,6 +696,8 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     // make sure the viewport matches the new window dimensions; note that width and 
     // height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);
+    CURRENT_WIDTH = width;
+    CURRENT_HEIGHT = height;
 }
 
 // glfw: whenever the mouse moves, this callback is called

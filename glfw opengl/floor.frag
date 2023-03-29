@@ -15,6 +15,10 @@ uniform vec3 viewPos;
 uniform float fogStr = .1f;
 uniform float texture_scale = 1.f;
 
+uniform float aspect_ratio = 1.f;
+uniform float width_aspect = 1.f;
+uniform float height_aspect = 1.f;
+
 vec2 tex_coords;
 
 struct PointLight {
@@ -62,9 +66,19 @@ float LinearizeDepth(float depth)
     return (2.0 * near * far) / (far + near - z * (far - near));	
 }
 
+float map(float value, float fromLow, float fromHigh, float toLow, float toHigh) {
+    return (value - fromLow) * ((toHigh - toLow) / (fromHigh - fromLow)) + toLow;
+}
+
 void main()
 {    
     vec2 ndc = (clipSpace.xy / clipSpace.w) / 2.f + .5f;
+    // float needed_aspect = ndc.x / aspect_ratio;
+    // ndc.y *= aspect_ratio;
+    //ndc.x = map(ndc.x, 0, 1/aspect_ratio, 0, 1);
+    //ndc.y = map(ndc.y, 0, 1/aspect_ratio, 0, 1);
+    // ndc.x /= width_aspect;
+    // ndc.y /= height_aspect;
     ndc.y *= -1.f;
     // if (length(FragPos - viewPos) < 6.f) discard;
 

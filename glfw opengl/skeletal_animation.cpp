@@ -212,7 +212,7 @@ int main()
 
         // update camera pos for projection and view
         //glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-        glm::mat4 projection = glm::infinitePerspective(glm::radians(50.f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f);
+        glm::mat4 projection = glm::infinitePerspective(glm::radians(50.f), (float)CURRENT_WIDTH / (float)CURRENT_HEIGHT, 0.1f);
         glm::mat4 view = camera.GetViewMatrix();
         modelShader.setMat4("projection", glm::value_ptr(projection));
         modelShader.setMat4("view", glm::value_ptr(view));

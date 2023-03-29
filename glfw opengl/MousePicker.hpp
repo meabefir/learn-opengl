@@ -4,6 +4,8 @@
 #include "camera.h"
 #include "constants.hpp"
 
+#include <iostream>
+
 class Model;
 
 class MousePicker {
@@ -53,8 +55,8 @@ public:
 	}
 
 	glm::vec2 getNormalizedDeviceCoords(float x, float y) {
-		float _x = (2.f * x) / (float)SCR_WIDTH - 1.f;
-		float _y = (2.f * y) / (float)SCR_HEIGHT - 1.f;
+		float _x = (2.f * x) / (float)CURRENT_WIDTH - 1.f;
+		float _y = (2.f * y) / (float)CURRENT_HEIGHT - 1.f;
 		// here
 		return glm::vec2(_x, -_y);
 	}
