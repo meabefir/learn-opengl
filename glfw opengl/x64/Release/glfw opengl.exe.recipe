@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\work\vs projects\learn-opengl\x64\Release\glfw opengl.exe</FullPath>
+      <FullPath>C:\work\vs projects\postgod\x64\Release\glfw opengl.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

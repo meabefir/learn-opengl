@@ -5,7 +5,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include "stb_image.h"
+#include <glm/gtx/quaternion.hpp>
 
 #include "shader.h"
 #include "camera.h"
@@ -23,6 +23,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow* window);
+void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 unsigned int loadTexture(const char* path);
 
 // settings
@@ -35,12 +36,114 @@ float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
 
+int CURRENT_WIDTH = SCR_WIDTH;
+int CURRENT_HEIGHT = SCR_HEIGHT;
+
 // timing
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
+glm::vec3 spotlightPos = glm::vec3(2.56604, 15.1884, -4.42532);
+
+glm::vec3 creature_positions[] = {
+    {5.1f, -.73f, 1.32f},
+    {-7.6f, -.95f, -1.68f},
+    {-.47f, -3.31f, -11.86f}
+};
+
+float createure_rotations[] = {
+    0.f,
+    0.f,
+    0.f
+};
+
+const int N_POINTS_LIGHTS = 6;
+glm::vec3 pointLightPositions[N_POINTS_LIGHTS] = {
+    glm::vec3(12.2864, 4.96267, 16.883),
+    glm::vec3(-18.7989, 5.73609, 7.17032),
+    glm::vec3(12.8172, 2.01248, -4.82285),
+    { 4.91513, 5.78663, 2.11437 },
+    { -7.58551, 3.3936, -1.06168 },
+    { -0.73936, 1.14029, -11.5726 },
+};
+
+glm::vec3 pointLightColors[N_POINTS_LIGHTS] = {
+    {1, .2, .2},
+    {1, 1, .2},
+    {.2, .2, 1},
+    {1,1,1},
+    {1,1,1},
+    {1,1,1},
+};
+
 glm::vec3 getTranslation(const glm::mat4& m) {
     return glm::vec3(m[3][0], m[3][1], m[3][2]);
+}
+
+typedef std::pair<glm::vec3, glm::vec3> path_point;
+const int path_size = 8;
+path_point running_path1[] = {
+    {{ -11.7169, -3.32293, -11.0594 }, { 0.712622, 0.262189, 0.650713 }},
+    {{ -7.38956, -1.7797, -5.81981 }, { 0.724098, 0.224951, 0.651981 }},
+    {{ -3.79064, -1.07775, -2.32254 }, { 0.846817, 0.116671, 0.51893 }},
+    {{ 4.18428, -1.31179, -1.43709 }, { 0.866315, 0.0366438, -0.498153 }},
+    {{ 7.00629, -2.68207, -7.14062 }, { 0.204838, -0.114937, -0.972024 }},
+    {{ 4.30406, -3.8679, -13.4096 }, { -0.390397, 0.0993199, -0.915274 }},
+    {{ 0.903631, -4.68388, -18.7095 }, { -0.932941, 0.00523609, -0.359991 }},
+    {{ -9.4508, -4.24063, -16.4058 }, { -0.782422, 0.187381, 0.593889 }},
+};
+
+glm::mat4 createLookAtMatrix(const glm::vec3& eye, const glm::vec3& target, const glm::vec3& up) {
+    glm::vec3 forward = glm::normalize(target - eye);
+    glm::vec3 right = glm::normalize(glm::cross(up, forward));
+    glm::vec3 newUp = glm::cross(forward, right);
+
+    glm::mat4 result(1.0f);
+    result[0] = glm::vec4(right, 0.0f);
+    result[1] = glm::vec4(newUp, 0.0f);
+    result[2] = glm::vec4(-forward, 0.0f);
+    result[3] = glm::vec4(glm::vec3(), 1.0f);
+
+    return result;
+}
+
+glm::mat4 getTransformOnPath(float t, path_point path[], size_t numPoints) {
+    // Ensure t is within the valid range [0, 1]
+    t = std::fmod(t, 1.0f);
+
+    float total_dist = 0.f;
+    for (int i = 0; i < numPoints; i++) {
+        int j = (i + 1) % numPoints;
+        total_dist += glm::distance(path[i].first, path[j].first);
+    }
+
+    float perc_to_dist = t * total_dist;
+
+    float curr_dist = 0.f;
+    float local_t = -1.f;
+    int idx1 = -1;
+    for (int i = 0; i < numPoints; i++) {
+        int j = (i + 1) % numPoints;
+        auto seg_dist = glm::distance(path[i].first, path[j].first);
+        curr_dist += seg_dist;
+
+        if (curr_dist > perc_to_dist) {
+            idx1 = i;
+            curr_dist -= seg_dist;
+            float distance_traveled_in_segment = perc_to_dist - curr_dist;
+            local_t = distance_traveled_in_segment / seg_dist;
+            break;
+        }
+    }
+
+    int idx2 = (idx1 + 1) % numPoints;
+    
+    glm::vec3 position = glm::mix(path[idx1].first, path[idx2].first, local_t);
+
+    auto rot = createLookAtMatrix(path[idx2].first, path[idx1].first, glm::vec3(0, 1, 0));
+    glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * rot;
+
+    return transform;
 }
 
 int main()
@@ -69,6 +172,7 @@ int main()
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetCursorPosCallback(window, mouse_callback);
     glfwSetScrollCallback(window, scroll_callback);
+    glfwSetKeyCallback(window, keyCallback);
 
     // tell GLFW to capture our mouse
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -144,37 +248,46 @@ int main()
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
-    const int N_POINTS_LIGHTS = 2;
-    glm::vec3 pointLightsPositions[N_POINTS_LIGHTS] = {
-        glm::vec3(7.f, 2.f, 4.0f),
-        glm::vec3(1.f, 5.f, 4.0f)
-    };
-
     Shader modelShader("sk.vert", "sk.frag");
 
     modelShader.use();
-    modelShader.setFloat("fogStr", 1.f);
-    modelShader.setVec3("fogColor", glm::vec3(1.f, 1.f, 0.f));
-    // Shader modelShader("model_light.vert", "diffuse.frag");
-    // Shader modelShader("model_light.vert", "depth_test.frag");
+    modelShader.setFloat("fogStr", .5f);
+    modelShader.setVec3("fogColor", glm::vec3(0.f, 0.f, 0.f));
+
     Shader lightCubeShader("light_cube.vert", "light_cube.frag");
-    // Model ourModel("assets/backpack/model.obj");
-    //Model ourModel("assets/sponza/model.obj");
-    //Model ourModel("assets/tren/model.obj");
-    Model ourModel("assets/vampire/model.dae");
-    Animation danceAnimation("assets/vampire/model.dae", &ourModel);
-    const int N = 50;
+ 
+    Model creatureModel("models/creature/creature.dae");
+    Model runningCreatureModel("models/running_creature/model.dae");
+    Model terrain("models/rock_terrain/model.obj");
+
+    Animation roarAnimation("models/creature/creature.dae", &creatureModel);
+    Animation flexAnimation("models/creature/creature_flex.dae", &creatureModel);
+    Animation runningAnimation("models/running_creature/model.dae", &runningCreatureModel);
+
+    const int N = 3;
     
     float timeOffsets[N];
     float t = 0.f;
     for (int i = 0; i < N; i++) {
         timeOffsets[i] = (t += 330.f);
     }
+
+    Animation* creature_animations[] = {
+        &roarAnimation,
+        &flexAnimation,
+        &roarAnimation,
+    };
+
     Animator animators[N];
     for (int i = 0; i < N; i++) {
-        animators[i].setAnimation(&danceAnimation);
+        animators[i].setAnimation(creature_animations[i]);
         animators[i].setCurrentTime(timeOffsets[i]);
     }
+
+    Animator runningAnimator;
+    runningAnimator.setAnimation(&runningAnimation);
+    runningAnimator.setCurrentTime(0.f);
+
 
     pair<glm::vec3, float> pos[N];
     float delta_angle = 3.141592653f * 2.f / N;
@@ -189,6 +302,7 @@ int main()
     // -----------
     while (!glfwWindowShouldClose(window))
     {
+        
         // per-frame time logic
         // --------------------
         float currentFrame = static_cast<float>(glfwGetTime());
@@ -201,11 +315,12 @@ int main()
         for (int i = 0; i < N; i++) {
             animators[i].UpdateAnimation(deltaTime);
         }
+        runningAnimator.UpdateAnimation(deltaTime);
 
         // render
         // ------
         // glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-        glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         modelShader.use();
@@ -225,10 +340,11 @@ int main()
         lightCubeShader.setMat4("view", glm::value_ptr(view));
         for (int i = 0; i < N_POINTS_LIGHTS; i++) {
             glm::mat4 model(1.f);
-            model = glm::translate(model, pointLightsPositions[i]);
+            model = glm::translate(model, pointLightPositions[i]);
             model = glm::scale(model, glm::vec3(.2f));
 
             lightCubeShader.setMat4("model", model);
+            lightCubeShader.setVec3("color", pointLightColors[i]);
 
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
@@ -240,39 +356,61 @@ int main()
         modelShader.setFloat("time", glfwGetTime());
         modelShader.setVec3("viewPos", camera.Position);
         for (int i = 0; i < N_POINTS_LIGHTS; i++) {
-            modelShader.setVec3("pointLights[" + std::to_string(i) + "].position", pointLightsPositions[i]);
-            modelShader.setVec3("pointLights[" + std::to_string(i) + "].ambient", glm::vec3(.01f));
-            modelShader.setVec3("pointLights[" + std::to_string(i) + "].diffuse", glm::vec3(.8f));
-            modelShader.setVec3("pointLights[" + std::to_string(i) + "].specular", glm::vec3(1.f));
+            modelShader.setVec3("pointLights[" + std::to_string(i) + "].position", pointLightPositions[i]);
+            modelShader.setVec3("pointLights[" + std::to_string(i) + "].ambient", glm::vec3(.01f) * pointLightColors[i]);
+            modelShader.setVec3("pointLights[" + std::to_string(i) + "].diffuse", glm::vec3(.8f) * pointLightColors[i]);
+            modelShader.setVec3("pointLights[" + std::to_string(i) + "].specular", glm::vec3(1.f) * pointLightColors[i]);
 
             modelShader.setFloat("pointLights[" + std::to_string(i) + "].constant", 1.0f);
-            modelShader.setFloat("pointLights[" + std::to_string(i) + "].linear", 0.027f);
-            modelShader.setFloat("pointLights[" + std::to_string(i) + "].quadratic", 0.0028f);
+            modelShader.setFloat("pointLights[" + std::to_string(i) + "].linear", i < 0 ? 0.027f : 0.007);
+            modelShader.setFloat("pointLights[" + std::to_string(i) + "].quadratic", i < 0 ? 0.0028f : 0.0002);
         }
 
-        modelShader.setVec3("spotLight.position", camera.Position);
-        modelShader.setVec3("spotLight.direction", camera.Front);
-        modelShader.setVec3("spotLight.diffuse", glm::vec3(1.0f));
-        modelShader.setVec3("spotLight.specular", glm::vec3(1.0f));
-        modelShader.setFloat("spotLight.cutOff", glm::cos(glm::radians(2.f)));
-        modelShader.setFloat("spotLight.outerCutOff", glm::cos(glm::radians(6.f)));
+        modelShader.setVec3("spotLight.position", spotlightPos);
+        glm::vec3 spotlight_dir = glm::vec3(0, -10, 0) + glm::vec3(glm::cos(currentFrame), 0, glm::sin(currentFrame)) * 3.f;
+        modelShader.setVec3("spotLight.direction", spotlight_dir);
+        modelShader.setVec3("spotLight.diffuse", glm::vec3(1,0,1));
+        modelShader.setVec3("spotLight.specular", glm::vec3(0,1,0));
+        modelShader.setFloat("spotLight.cutOff", glm::cos(glm::radians(5.f)));
+        modelShader.setFloat("spotLight.outerCutOff", glm::cos(glm::radians(20.f)));
         
+        // draw creatures
         for (int i = 0; i < N; i++) {
 
             auto transforms = animators[i].GetFinalBoneMatrices();
             for (int j = 0; j < transforms.size(); ++j)
                 modelShader.setMat4("finalBonesMatrices[" + std::to_string(j) + "]", transforms[j]);
 
-            // draw the model
             glm::mat4 model = glm::mat4(1.0f);
-            model = glm::translate(model, pos[i].first); 
-            model = glm::rotate(model, pos[i].second, glm::vec3(0, 1, 0));
+            model = glm::translate(model, creature_positions[i]);
+            model = glm::rotate(model, glm::radians(createure_rotations[i]), glm::vec3(0, 1, 0));
             model = glm::scale(model, glm::vec3(1.f));
             modelShader.setMat4("model", model);
 
-            ourModel.Draw(modelShader);
+            modelShader.setBool("calcBones", true);
+
+            creatureModel.Draw(modelShader);
         }
         
+        // draw running monster
+        static float run_progress = 0.f;
+        run_progress += deltaTime * .1f;
+        if (run_progress >= 1.f) {
+            run_progress -= 1.f;
+        }
+        size_t size = sizeof(running_path1) / sizeof(path_point);
+        auto trans = getTransformOnPath(run_progress, running_path1, size);
+
+        auto transforms = runningAnimator.GetFinalBoneMatrices();
+        for (int j = 0; j < transforms.size(); ++j)
+            modelShader.setMat4("finalBonesMatrices[" + std::to_string(j) + "]", transforms[j]);
+        modelShader.setMat4("model", trans);
+        runningCreatureModel.Draw(modelShader);
+
+        // draw terrain
+        modelShader.setBool("calcBones", false);
+        modelShader.setMat4("model", glm::translate(glm::scale(glm::mat4(), glm::vec3(2.f)), glm::vec3(0,-4.5,0)));
+        terrain.Draw(modelShader);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
@@ -306,6 +444,26 @@ void processInput(GLFWwindow* window)
         camera.ProcessKeyboard(DOWN, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
         camera.ProcessKeyboard(UP, deltaTime);
+    
+   /* if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS) {
+        auto& cam_pos = camera.Position;
+        std::cout << cam_pos.x << ' ' << cam_pos.y << ' ' << cam_pos.z << '\n';
+    }*/
+}
+
+void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+    //if (action == GLFW_PRESS || action == GLFW_REPEAT) {
+    if (action == GLFW_PRESS) {
+        switch (key) {
+            case GLFW_KEY_T:
+            {
+                auto& cam_pos = camera.Position;
+                std::cout << "{{ " << cam_pos.x << ", " << cam_pos.y << ", " << cam_pos.z << " }, ";
+                std::cout << "{ " << camera.Front.x << ", " << camera.Front.y << ", " << camera.Front.z << " }},\n";
+                break;
+            }
+        }
+    }
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes

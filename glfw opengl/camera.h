@@ -85,6 +85,7 @@ public:
     glm::mat4 GetViewMatrix()
     {
         if (cameraMode == MODE::FREE)
+            //return glm::lookAt(Position, Position + Front, Up);
             return glm::lookAt(Position, Position + Front, Up);
         else if (cameraMode == MODE::PIVOT)
             return glm::lookAt(Position, Pivot, Up);

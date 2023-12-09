@@ -1,5 +1,4 @@
 #include <glad/glad.h>
-#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 #include <glm/glm.hpp>
@@ -65,8 +64,8 @@ int main()
     // glfw: initialize and configure
     // ------------------------------
     glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 #ifdef __APPLE__
@@ -190,11 +189,14 @@ int main()
         0.5f, 0.5f, 0.0f,      0, 0, 1,          1.0f * dim_textura, 1.0f * dim_textura,        
     };
 
+    cout << sizeof(v) << '\n';
+    cout << sizeof(float) << '\n';
     unsigned int vbo_floor, vao_floor;
     glGenBuffers(1, &vbo_floor);
     glGenVertexArrays(1, &vao_floor);
     glBindVertexArray(vao_floor);
     glBindBuffer(GL_ARRAY_BUFFER, vbo_floor);
+    cout << sizeof(v) << '\n';
     glBufferData(GL_ARRAY_BUFFER, sizeof(v), &v, GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(0);
@@ -220,7 +222,7 @@ int main()
 #pragma endregion floor
 
 #pragma region viewport
-    dim_textura = 1.f;
+    dim_textura = 2.f;
     float scale = 1.f;
     GLfloat viewport_f[] = {
         // pozitie              normale             tex_coords
@@ -287,13 +289,24 @@ int main()
     // Shader modelShader("model_light.vert", "diffuse.frag");
     // Shader modelShader("model_light.vert", "depth_test.frag");
     Shader lightCubeShader("light_cube.vert", "light_cube.frag");
-    //Model ourModel("assets/sponza/model.obj");
+    Model ourModel("assets/sponza/model.obj");
      Model tren("assets/tren/model.obj");
+     //Model tren("assets/turret/model.obj");
      stbi_set_flip_vertically_on_load(true);
      Model backpack("assets/backpack/model.obj");
 
      models.push_back(&backpack);
      models.push_back(&tren);
+
+     const int nModels = 50;
+     for (int i = 0; i < nModels; i++) {
+         glm::mat4 mm;
+         mm = glm::translate(mm, glm::vec3(8, 3, 0));
+         mm = glm::scale(mm, glm::vec3(.8));
+
+
+
+     }
 
      glm::mat4 mm;
      mm = glm::translate(mm, glm::vec3(8, 3, 0));
@@ -359,6 +372,7 @@ int main()
         /*floorShader.setFloat("width_aspect", width_aspect);
         floorShader.setFloat("height_aspect", height_aspect);*/
 
+        
 
         // DRAWING BEGINS
         modelShader.use();
@@ -504,6 +518,8 @@ int main()
 
         //glBindFramebuffer(GL_FRAMEBUFFER, 0);
         // test
+
+
         glDisable(GL_DEPTH_TEST);
         //glDisable(GL_CULL_FACE);
         model = glm::mat4(1.f);

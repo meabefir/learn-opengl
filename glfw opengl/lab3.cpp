@@ -40,17 +40,9 @@ int main()
 
     std::cout << x1 << ' ' << y1 << '\n' << x2 << ' ' << y2;
 
-    //glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
-    //glm::mat4 trans = glm::mat4(1.0f);
-    //trans = glm::translate(trans, glm::vec3(1.0f, 1.0f, 0.0f));
-    //vec = trans * vec;
-    //std::cout << vec.x << vec.y << vec.z << std::endl;
-
-    // glfw: initialize and configure
-    // ------------------------------
     glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 #ifdef __APPLE__
@@ -153,58 +145,22 @@ int main()
         }
         stbi_image_free(data);
     }
-    //////////////////////////////////////////////////////////////////
 
     unsigned int VBO, VAO, EBO;
-    glGenVertexArrays(1, &VAO); // we can also generate multiple VAOs or buffers at the same time
+    glGenVertexArrays(1, &VAO); 
     glGenBuffers(1, &VBO);
-    // glGenBuffers(1, &EBO);
-    // first triangle setup
-    // --------------------
+
     glBindVertexArray(VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-   /* glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);*/
-
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1); 
-    /* glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-    glEnableVertexAttribArray(2);*/
-    // glBindVertexArray(0); // no need to unbind at all as we directly bind a different VAO the next few lines
-    // second triangle setup
-
-    // glBindVertexArray(0); // not really necessary as well, but beware of calls that could affect VAOs while this one is bound (like binding element buffer objects, or enabling/disabling vertex attributes)
-   /* int nrAttributes;
-    glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &nrAttributes);
-    std::cout << "Maximum nr of vertex attributes supported: " << nrAttributes << std::endl;*/
-
-    // uncomment this call to draw in wireframe polygons.
-    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    // render loop
-    // -----------
 
     sh1.use();
-    /*sh1.setInt("texture1", 0);
-    sh1.setInt("texture2", 1);*/
-
-    //glActiveTexture(GL_TEXTURE0); // activate the texture unit first before binding texture
-    //glBindTexture(GL_TEXTURE_2D, textures[0]);
-
-    //glActiveTexture(GL_TEXTURE1); // activate the texture unit first before binding texture
-    //glBindTexture(GL_TEXTURE_2D, textures[1]);
-
-    // create transform of rotation 90 degrees around z axis and pass it to the vertex shader
-    /*glm::mat4 trans = glm::mat4(1.0f);
-    trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
-    trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));*/
-
-    // note that we're translating the scene in the reverse direction of where we want to move
-    // view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
 
     // projection matrix
     glm::mat4 projection;
@@ -215,14 +171,6 @@ int main()
 
     while (!glfwWindowShouldClose(window))
     {
-        /*a = cos(glfwGetTime());
-        b = sin(glfwGetTime());
-
-        y1 = (-c - a * x1) / b;
-        y2 = (-c - a * x2) / b;*/
-
-        // input
-        // -----
         processInput(window);
 
         // render
@@ -230,19 +178,13 @@ int main()
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        // now when we draw the triangle we first use the vertex and orange fragment shader from the first program
-        // sh1.setFloat("blend_amount", blend_amount);
-
-        // apply rotation
-       /* glm::mat4 trans = glm::mat4(1.f);
-        trans = glm::translate(trans, glm::vec3(.5f, -.5f, .0f));
-        trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));*/
+        glBegin(GL_LINES);
+        glColor4f(1, 1, 1, 1);
+        glVertex3f(0, 0, 0);
+        glVertex3f(1111, 1111, 1111);
+        glEnd();
 
         glm::mat4 model = glm::mat4(1.0f);
-        /*float scale = 100.f;
-        model = glm::translate(model, glm::vec3(250.f, 250.f, .0f));
-        model = glm::scale(model, glm::vec3(scale));*/
-        // model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 
         unsigned int modelLoc = glGetUniformLocation(sh1.ID, "model");
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
@@ -266,7 +208,6 @@ int main()
         glm::vec3 p1_to_mid = (mid - p1);
 
         model = glm::mat4(1.0f);
-        // model = glm::translate(model, -p1_to_mid);
         model = glm::translate(model, p1_to_mid);
         model = glm::translate(model, p1);
         model = glm::rotate(model, glm::radians(50.f * (float)glfwGetTime()), glm::vec3(0.f, 0.f, 1.f));
@@ -305,34 +246,13 @@ int main()
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glDrawArrays(GL_QUADS, 25, 4);
 
-        // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-        // second object on the top left, translate and scale
-
-        /*trans = glm::mat4(1.f);
-        float _sin = sin(glfwGetTime());
-        trans = glm::translate(trans, glm::vec3(-.5f, .5f, .0f));
-        trans = glm::scale(trans, glm::vec3(_sin, _sin, _sin));
-
-        glUniformMatrix4fv(transform_location, 1, GL_FALSE, glm::value_ptr(trans));
-
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);*/
-
-        // then we draw the second triangle using the data from the second VAO
-        // when we draw the second triangle we want to use a different shader program so we switch to the shader program with our 
+        
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
-
-    // optional: de-allocate all resources once they've outlived their purpose:
-    // -----------------------------------------------------------------------
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
-    // glDeleteBuffers(1, &EBO);
-    glDeleteTextures(2, textures);
 
     glfwTerminate();
     return 0;
@@ -370,7 +290,5 @@ void processInput(GLFWwindow* window)
 // ---------------------------------------------------------------------------------------------
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
-    // make sure the viewport matches the new window dimensions; note that width and 
-    // height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);
 }

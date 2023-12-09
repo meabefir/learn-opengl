@@ -51,7 +51,7 @@ vec3 spot_light_influence(SpotLight light);
 float fog_influence();
 
 float near = 0.1; 
-float far  = 100.0; 
+float far  = 500.0; 
 
 float LinearizeDepth(float depth) 
 {
@@ -68,22 +68,22 @@ void main()
     // float depth = LinearizeDepth(gl_FragCoord.z) / far;
     // if (depth < .1f) discard;
 
-    vec3 color = vec3(texture(texture_diffuse1, TexCoords));
+    // vec3 color = vec3(texture(texture_diffuse1, TexCoords));
+    vec3 color = vec3(0,0,0);
 
-    /*
     for (int i = 0; i < NR_POINT_LIGHTS; i++) {
         color += point_light_influence(pointLights[i]);
     }
     color += spot_light_influence(spotLight);
-    */
-
+    
     // color = mix(color, fogColor, fog_influence());
 
     // gl_FragCoord stuff
     // float scale = 0.5f;
     // color += vec3(gl_FragCoord.x / 800.f, gl_FragCoord.y / 600.f, abs(sin(time))) * scale;
 
-    FragColor = vec4(color, texture(texture_diffuse1, TexCoords).a);
+    // FragColor = vec4(color, texture(texture_diffuse1, TexCoords).a);
+    FragColor = vec4(color, 1);
 }
 
 float fog_influence() {
@@ -137,7 +137,7 @@ vec3 spot_light_influence(SpotLight light) {
 
     vec3 lookVector = normalize(viewPos - FragPos);
     vec3 lightDirReflected = reflect(-lightDir, normal);
-    float spec = pow(dot(lightDirReflected, lookVector), shininess);
+    float spec = pow(max(dot(lightDirReflected, lookVector), 0), shininess);
 
     vec3 diffuse = light.diffuse * diff * vec3(texture(texture_diffuse1, TexCoords));
     vec3 specular = light.specular * spec * vec3(texture(texture_specular1, TexCoords));
